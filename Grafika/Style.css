@@ -1,0 +1,14 @@
+button#plocha {
+    color: transparent;
+    border: none;
+    background: none;       /* Žiadne pozadie */
+    /*box-shadow: none;*/       /* Bez tieňov */
+
+}
+
+label#coordinate-label {
+    font-size: 30px; /* Nastavte veľkosť textu na rozumnú hodnotu */
+    font-weight: bold; /* Zväčšenie tučnosti */
+    color: black; /* Nastavenie farby */
+}
+
