@@ -16,6 +16,8 @@ add_executable(LodickyUdSP main.c
         Policko.h
         Policko.c
         HraciaPlocha.c
-        Game_Logic.h)
+        Game_Logic.h
+        GUI.h
+        GUI.c)
 
 target_link_libraries(LodickyUdSP ${GTK_LIBRARIES})

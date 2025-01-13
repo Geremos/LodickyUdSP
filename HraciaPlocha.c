@@ -23,6 +23,9 @@ void init_hraciaPlocha(HraciaPlocha* hraciaPlocha)
 
 Policko* getPolicko(int x, int y, HraciaPlocha* hraciaPlocha)
 {
+    if (x < 0 || x >= VELKOST_PLOCHY || y < 0 || y >= VELKOST_PLOCHY) {
+        return NULL;
+    }
     return &hraciaPlocha->hraciaPlocha[x][y];
 }
 
@@ -70,7 +73,7 @@ bool nastavLodicku(enum LodickaEnum typLodicky, int zX, int zY, int kX, int kY, 
     }
     return true;
 }
-
+/*
 bool on_button_clicked(GtkWidget *widget, gpointer data) {
         Policko *policko = (Policko *)data;
 
@@ -99,9 +102,9 @@ bool on_button_clicked(GtkWidget *widget, gpointer data) {
         // Nastavenie stavu políčka ako zasiahnutého
         setStrela(policko);
         return true;
-}
+}*/
 
-
+/*
 void create_grid(GtkWidget *grid, HraciaPlocha *hraciaPlocha) {
     for (int i = 0; i < VELKOST_PLOCHY; i++) {
         for (int j = 0; j < VELKOST_PLOCHY; j++) {
@@ -117,7 +120,7 @@ void create_grid(GtkWidget *grid, HraciaPlocha *hraciaPlocha) {
         }
     }
 }
-
+*/
 void destroy_hraciaPlocha(HraciaPlocha* hraciaPlocha)
 {
     for (int i = 0; i < VELKOST_PLOCHY; i++)
