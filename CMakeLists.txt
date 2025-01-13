@@ -17,6 +17,7 @@ add_executable(LodickyUdSP main.c
         Policko.c
         HraciaPlocha.c
         Game_Logic.h
+        Game_Logic.c
         GUI.h
         GUI.c)
 

@@ -6,9 +6,14 @@
 // Inicializácia GUI
 #include <gtk/gtk.h>
 #include "HraciaPlocha.h"
-#include "Game_Logic.h"
 
 // Vytvára hlavné rozloženie GUI
 void create_main_layout(HraciaPlocha *hrac, HraciaPlocha *oponent);
+void create_grid(GtkWidget *grid, HraciaPlocha *plocha, bool is_interactive, bool editor);
+void strela(GtkWidget *widget, gpointer data);
+void suradnica_lodicky(GtkWidget *widget, gpointer data);
+void on_confirm_clicked(GtkWidget *widget, gpointer data);
+void open_ship_editor(HraciaPlocha *plocha);
+void create_editor_grid(GtkWidget *grid, HraciaPlocha *plocha);
 
 #endif // GUI_H

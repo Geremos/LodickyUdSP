@@ -11,6 +11,7 @@ typedef struct Policko
 {
     enum TypPolickaEnum typPolicka;
     enum LodickaEnum lodickaEnum;
+    char* image_path;
     bool strela;
     int x;
     int y;

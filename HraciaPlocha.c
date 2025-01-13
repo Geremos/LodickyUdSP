@@ -76,54 +76,7 @@ bool nastavLodicku(enum LodickaEnum typLodicky, int zX, int zY, int kX, int kY, 
     }
     return true;
 }
-/*
-bool on_button_clicked(GtkWidget *widget, gpointer data) {
-        Policko *policko = (Policko *)data;
 
-        g_print("Kliknuté na políčko: (%d, %d)\n", policko->x, policko->y);
-
-        // Kontrola, či už bolo na políčko vystrelené
-        if (policko->strela) {
-            g_print("Na toto políčko už bolo vystrelené.\n");
-            return false;
-        }
-
-        // Výber obrázka na prekrytie
-        const char *image_path;
-        if (policko->lodickaEnum != noShip) {
-            image_path = "../GUI_res/lodicka.png"; // Zasiahnutá loď
-        } else {
-            image_path = "../GUI_res/strela.png"; // Výbuch na vode
-        }
-
-        // Vytvorenie nového obrázka
-        GtkWidget *new_image = gtk_image_new_from_file(image_path);
-
-        // Nahradenie existujúceho obrázka tlačidla novým obrázkom
-        gtk_button_set_image(GTK_BUTTON(widget), new_image);
-
-        // Nastavenie stavu políčka ako zasiahnutého
-        setStrela(policko);
-        return true;
-}*/
-
-/*
-void create_grid(GtkWidget *grid, HraciaPlocha *hraciaPlocha) {
-    for (int i = 0; i < VELKOST_PLOCHY; i++) {
-        for (int j = 0; j < VELKOST_PLOCHY; j++) {
-            buttons[i][j] = gtk_button_new();
-            gtk_widget_set_size_request(buttons[i][j], 60, 60);
-            gtk_grid_attach(GTK_GRID(grid), buttons[i][j], j, i, 1, 1);
-
-            // Set initial image for water
-            GtkWidget *water_image = gtk_image_new_from_file("../GUI_res/voda.png");
-            gtk_button_set_image(GTK_BUTTON(buttons[i][j]), water_image);
-
-            g_signal_connect(buttons[i][j], "clicked", G_CALLBACK(on_button_clicked), &hraciaPlocha->hraciaPlocha[i][j]);
-        }
-    }
-}
-*/
 void destroy_hraciaPlocha(HraciaPlocha* hraciaPlocha)
 {
     for (int i = 0; i < VELKOST_PLOCHY; i++)
