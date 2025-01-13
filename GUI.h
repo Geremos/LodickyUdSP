@@ -1,7 +1,6 @@
 //
 // Created by juraj on 13. 1. 2025.
 //
-
 #ifndef GUI_H
 #define GUI_H
 // Inicializácia GUI
@@ -13,4 +12,3 @@
 void create_main_layout(HraciaPlocha *hrac, HraciaPlocha *oponent);
 
 #endif // GUI_H
-

@@ -1,3 +1,6 @@
+//
+// Created by juraj on 13. 1. 2025.
+//
 #include "gui.h"
 #include "game_logic.h"
 

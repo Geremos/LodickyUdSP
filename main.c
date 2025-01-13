@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
     //
     // gtk_widget_show_all(window);
     // gtk_main();
-
+/*
     gtk_init(&argc, &argv);
 
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -127,7 +127,9 @@ int main(int argc, char *argv[]) {
     gtk_widget_show_all(window);
     gtk_main();
 
-    destroy_hraciaPlocha(&hraciaPlocha);
+    destroy_hraciaPlocha(&hraciaPlocha);*/
+
+
 
     return 0;
 }
