@@ -21,3 +21,4 @@ bool player_shoot(GameState *state, int x, int y);
 bool opponent_shoot(GameState *state, int x, int y);
 bool is_game_over(GameState *state);
 #endif //GAME_LOGIC_H
+//kjf
