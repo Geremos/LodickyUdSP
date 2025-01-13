@@ -1,0 +1,1 @@
+/usr/bin/cc -g CMakeFiles/LodickyUdSP.dir/main.c.o CMakeFiles/LodickyUdSP.dir/Policko.c.o CMakeFiles/LodickyUdSP.dir/HraciaPlocha.c.o CMakeFiles/LodickyUdSP.dir/Game_Logic.c.o CMakeFiles/LodickyUdSP.dir/GUI.c.o -o LodickyUdSP  -lgtk-3 -lgdk-3 -lz -lpangocairo-1.0 -lpango-1.0 -lharfbuzz -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0

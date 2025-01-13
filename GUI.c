@@ -127,9 +127,6 @@ void suradnica_lodicky(GtkWidget *widget, gpointer data) {
     // Tlačidlo pre mriežku
     GtkWidget *button = gtk_button_new();
     gtk_widget_set_size_request(button, 60, 60);
-
-
-
     // Uvoľnenie zdrojov
 
     // Prepnúť stav políčka medzi "loď" a "voda"
