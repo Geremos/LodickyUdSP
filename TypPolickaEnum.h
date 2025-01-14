@@ -18,7 +18,8 @@ enum LodickaEnum
     noShip = 0,
     Destroyer = 2,
     battleship = 3,
-    aircraft_carrier = 4
+    aircraft_carrier = 4,
+    Battlecruiser = 5
 };
 
 #endif //TYPPOLICKAENUM_H

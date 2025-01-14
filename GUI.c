@@ -168,6 +168,31 @@ void on_confirm_clicked(GtkWidget *widget, gpointer data) {
     g_print("Lodičky hráča boli potvrdené a editor zatvorený.\n");
 }
 
+// void open_ship_editor(HraciaPlocha *player_board) {
+//     GtkWidget *editor_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+//     gtk_window_set_title(GTK_WINDOW(editor_window), "Editor lodičiek");
+//     gtk_window_set_default_size(GTK_WINDOW(editor_window), 800, 800);
+//
+//     g_signal_connect(editor_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+//
+//     GtkWidget *editor_layout = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+//     gtk_container_add(GTK_CONTAINER(editor_window), editor_layout);
+//
+//     editor_grid = gtk_grid_new();
+//     gtk_box_pack_start(GTK_BOX(editor_layout), editor_grid, TRUE, TRUE, 0);
+//
+//     create_grid(editor_grid, player_board,true,true);
+//
+//     confirm_button = gtk_button_new_with_label("Confirm");
+//     gtk_box_pack_start(GTK_BOX(editor_layout), confirm_button, FALSE, FALSE, 0);
+//
+//     g_signal_connect(confirm_button, "clicked", G_CALLBACK(on_confirm_clicked), editor_window);
+//
+//     gtk_widget_show_all(editor_window);
+//
+//     gtk_main();
+// }
+
 void open_ship_editor(HraciaPlocha *player_board) {
     GtkWidget *editor_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(editor_window), "Editor lodičiek");
@@ -175,20 +200,60 @@ void open_ship_editor(HraciaPlocha *player_board) {
 
     g_signal_connect(editor_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
-    GtkWidget *editor_layout = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
-    gtk_container_add(GTK_CONTAINER(editor_window), editor_layout);
+    // Hlavný grid
+    GtkWidget *main_grid = gtk_grid_new();
+    gtk_container_add(GTK_CONTAINER(editor_window), main_grid);
 
+    // Editor hracej plochy naľavo
     editor_grid = gtk_grid_new();
-    gtk_box_pack_start(GTK_BOX(editor_layout), editor_grid, TRUE, TRUE, 0);
+    gtk_grid_attach(GTK_GRID(main_grid), editor_grid, 0, 0, 1, 1);
 
-    create_grid(editor_grid, player_board,true,true);
+    create_grid(editor_grid, player_board, true, true);
 
-    confirm_button = gtk_button_new_with_label("Potvrdiť a začať hru");
-    gtk_box_pack_start(GTK_BOX(editor_layout), confirm_button, FALSE, FALSE, 0);
+    // Panel s lodičkami napravo
+    GtkWidget *ships_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+    gtk_widget_set_name(ships_box, "ships-box"); // CSS pre ohraničenie
+    gtk_grid_attach(GTK_GRID(main_grid), ships_box, 1, 0, 1, 1);
+
+    // Popis pre pravý panel
+    GtkWidget *description_label = gtk_label_new("Dostupné lodičky:");
+    gtk_widget_set_name(description_label, "coordinate-label");
+    gtk_box_pack_start(GTK_BOX(ships_box), description_label, FALSE, FALSE, 0);
+
+    int ship_counts[] = {4, 3, 2, 1}; // Počet lodí každého typu
+    const char *ship_images[] = {
+        "../Grafika/Lodicka2_V.png",
+        "../Grafika/Lodicka3_V.png",
+        "../Grafika/Lodicka4_V.png",
+        "../Grafika/Lodicka5_V.png"
+    };
+
+    for (int i = 0; i < 4; i++) {
+        GtkWidget *ship_row = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+        gtk_box_pack_start(GTK_BOX(ships_box), ship_row, FALSE, FALSE, 0);
+
+        GtkWidget *ship_image = gtk_image_new_from_file(ship_images[i]);
+        gtk_box_pack_start(GTK_BOX(ship_row), ship_image, FALSE, FALSE, 0);
+
+        char count_text[20];
+        snprintf(count_text, sizeof(count_text), "x %d", ship_counts[i]);
+        GtkWidget *ship_count_label = gtk_label_new(count_text);
+        gtk_widget_set_name(ship_count_label, "coordinate-label");
+
+        gtk_box_pack_start(GTK_BOX(ship_row), ship_count_label, FALSE, FALSE, 0);
+    }
+
+    // Potvrdzovacie tlačidlo zarovnané na stred
+    GtkWidget *button_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous(GTK_BOX(button_box), TRUE);
+    gtk_grid_attach(GTK_GRID(main_grid), button_box, 0, 1, 2, 1);
+
+    confirm_button = gtk_button_new_with_label("Confirm");
+    gtk_box_pack_start(GTK_BOX(button_box), confirm_button, FALSE, FALSE, 0);
 
     g_signal_connect(confirm_button, "clicked", G_CALLBACK(on_confirm_clicked), editor_window);
 
     gtk_widget_show_all(editor_window);
-
-    gtk_main();
 }
+
+
