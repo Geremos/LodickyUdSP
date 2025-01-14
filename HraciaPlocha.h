@@ -21,9 +21,6 @@ typedef struct HraciaPlocha
 void init_hraciaPlocha(HraciaPlocha* hraciaPlocha);
 Policko* getPolicko(int x, int y, HraciaPlocha* hraciaPlocha);
 void vypis(HraciaPlocha* hraciaPlocha);
-bool nastavLodicku(enum LodickaEnum typLodicky,int zX,int zY,int kX,int kY, HraciaPlocha* hraciaPlocha);
-//void nastavBorder(int zX, int zY, int kX, int kY);
-//void create_grid(GtkWidget *grid, HraciaPlocha *hraciaPlocha);
-//bool on_button_clicked(GtkWidget *widget, gpointer data);
 void destroy_hraciaPlocha(HraciaPlocha* hraciaPlocha);
+
 #endif //HRACIAPLOCHA_H

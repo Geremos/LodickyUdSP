@@ -2,10 +2,7 @@ CMakeFiles/LodickyUdSP.dir/Game_Logic.c.o: \
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Game_Logic.c \
  /usr/include/stdc-predef.h \
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/game_logic.h \
- /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/HraciaPlocha.h \
- /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Policko.h \
- /usr/lib/gcc/x86_64-linux-gnu/14/include/stdbool.h \
- /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/TypPolickaEnum.h \
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/GUI.h \
  /usr/include/gtk-3.0/gtk/gtk.h /usr/include/gtk-3.0/gdk/gdk.h \
  /usr/include/gtk-3.0/gdk/gdkconfig.h /usr/include/glib-2.0/glib.h \
  /usr/include/glib-2.0/glib/galloca.h /usr/include/glib-2.0/glib/gtypes.h \
@@ -665,7 +662,7 @@ CMakeFiles/LodickyUdSP.dir/Game_Logic.c.o: \
  /usr/include/gtk-3.0/gtk/gtkshortcutsgroup.h \
  /usr/include/gtk-3.0/gtk/gtkshortcutssection.h \
  /usr/include/gtk-3.0/gtk/gtkshortcutsshortcut.h \
- /usr/include/gtk-3.0/gtk/gtk.h /usr/include/gtk-3.0/gtk/gtkshow.h \
+ /usr/include/gtk-3.0/gtk/gtkshow.h \
  /usr/include/gtk-3.0/gtk/gtkstacksidebar.h \
  /usr/include/gtk-3.0/gtk/gtkstack.h \
  /usr/include/gtk-3.0/gtk/gtksizerequest.h \
@@ -732,4 +729,9 @@ CMakeFiles/LodickyUdSP.dir/Game_Logic.c.o: \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvscale.h \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvscrollbar.h \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvseparator.h \
- /usr/include/gtk-3.0/gtk/gtk-autocleanups.h
+ /usr/include/gtk-3.0/gtk/gtk-autocleanups.h \
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/HraciaPlocha.h \
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Policko.h \
+ /usr/lib/gcc/x86_64-linux-gnu/14/include/stdbool.h \
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/TypPolickaEnum.h \
+ /usr/include/gtk-3.0/gtk/gtk.h

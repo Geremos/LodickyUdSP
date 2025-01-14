@@ -7,10 +7,7 @@
 
 #include "HraciaPlocha.h"
 
-
-#include <stdio.h>
 #include <stdlib.h>
-extern GtkWidget *buttons[VELKOST_PLOCHY][VELKOST_PLOCHY];
 
 // Tlačidlá pre hraciu plochu
 void init_hraciaPlocha(HraciaPlocha* hraciaPlocha)
@@ -41,41 +38,6 @@ void init_hraciaPlocha(HraciaPlocha* hraciaPlocha)
 //         printf("\n");
 //     }
 // }
-
-
-bool nastavLodicku(enum LodickaEnum typLodicky, int zX, int zY, int kX, int kY, HraciaPlocha* hraciaPlocha)
-{
-    if (zX < 0 || zY < 0 || kX < 0 || kY < 0 || zX >= VELKOST_PLOCHY || zY >= VELKOST_PLOCHY || kX >= VELKOST_PLOCHY || kY >= VELKOST_PLOCHY)
-    {
-        return false;
-    }
-    if (zX > kX || zY > kY)
-    {
-        return false;
-    }
-    if (kX - zX != typLodicky - 1 && kY - zY != typLodicky - 1)
-    {
-        return false;
-    }
-    for (int i = zX; i <= kX; i++)
-    {
-        for (int j = zY; j <= kY; j++)
-        {
-            if (hraciaPlocha->hraciaPlocha[i][j].lodickaEnum != noShip)
-            {
-                return false;
-            }
-        }
-    }
-    for (int i = zX; i <= kX; i++)
-    {
-        for (int j = zY; j <= kY; j++)
-        {
-            hraciaPlocha->hraciaPlocha[i][j].lodickaEnum = typLodicky;
-        }
-    }
-    return true;
-}
 
 void destroy_hraciaPlocha(HraciaPlocha* hraciaPlocha)
 {

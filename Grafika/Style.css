@@ -12,3 +12,8 @@ label#coordinate-label {
     color: black; /* Nastavenie farby */
 }
 
+#ships-box {
+    border: 10px solid black;
+    padding: 30px;
+}
+

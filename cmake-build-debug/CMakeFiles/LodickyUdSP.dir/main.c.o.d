@@ -24,6 +24,7 @@ CMakeFiles/LodickyUdSP.dir/main.c.o: \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
  /usr/include/x86_64-linux-gnu/bits/floatn.h \
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Game_Logic.h \
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/GUI.h \
  /usr/include/gtk-3.0/gtk/gtk.h /usr/include/gtk-3.0/gdk/gdk.h \
  /usr/include/gtk-3.0/gdk/gdkconfig.h /usr/include/glib-2.0/glib.h \

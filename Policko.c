@@ -11,9 +11,9 @@ void init_Policko(Policko* policko, int x, int y)
     policko->x = x;
     policko->y = y;
     policko->strela = false;
-    policko->barrieraPreLodicku = false;
     policko->typPolicka = voda;
     policko->lodickaEnum = noShip;
+
 }
 
 int getX(Policko* policko)
@@ -34,16 +34,6 @@ bool getStrela(Policko* policko)
 void setStrela(Policko* policko)
 {
     policko->strela = true;
-}
-
-void setBarriera(Policko* policko)
-{
-    policko->barrieraPreLodicku = true;
-}
-
-bool getBarriera(Policko* policko)
-{
-    return policko->barrieraPreLodicku;
 }
 
 enum TypPolickaEnum getTyp(Policko* policko)

@@ -790,6 +790,7 @@ CMakeFiles/LodickyUdSP.dir/GUI.c.o: /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/
   /usr/lib/x86_64-linux-gnu/glib-2.0/include/glibconfig.h
 
 CMakeFiles/LodickyUdSP.dir/Game_Logic.c.o: /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Game_Logic.c \
+  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/GUI.h \
   /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/HraciaPlocha.h \
   /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Policko.h \
   /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/TypPolickaEnum.h \
@@ -2415,6 +2416,7 @@ CMakeFiles/LodickyUdSP.dir/Policko.c.o: /mnt/c/Users/juraj/Desktop/UdSP/LodickyU
 
 CMakeFiles/LodickyUdSP.dir/main.c.o: /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/main.c \
   /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/GUI.h \
+  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Game_Logic.h \
   /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/HraciaPlocha.h \
   /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Policko.h \
   /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/TypPolickaEnum.h \
@@ -3201,6 +3203,8 @@ CMakeFiles/LodickyUdSP.dir/main.c.o: /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP
   /usr/lib/linux/uapi/x86/asm/errno.h \
   /usr/lib/x86_64-linux-gnu/glib-2.0/include/glibconfig.h
 
+
+/mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Game_Logic.h:
 
 /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Policko.c:
 

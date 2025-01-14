@@ -9,7 +9,7 @@
 
 // Vytvára hlavné rozloženie GUI
 void create_main_layout(HraciaPlocha *hrac, HraciaPlocha *oponent);
-void create_grid(GtkWidget *grid, HraciaPlocha *plocha, bool is_interactive, bool editor);
+void create_grid(GtkWidget *grid, HraciaPlocha *plocha, bool is_interactive, GCallback callback);
 void strela(GtkWidget *widget, gpointer data);
 void suradnica_lodicky(GtkWidget *widget, gpointer data);
 void on_confirm_clicked(GtkWidget *widget, gpointer data);

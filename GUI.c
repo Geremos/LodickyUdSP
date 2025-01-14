@@ -33,13 +33,13 @@ void strela(GtkWidget *widget, gpointer data) {
     GtkWidget *image = gtk_image_new_from_file(image_path);
     gtk_button_set_image(GTK_BUTTON(widget), image);
 
-    // Nastavenie stavu políčka ako zasiahnutého
+    // Nastavenie stavu políčka, ako zasiahnutého
     setStrela(policko);
 }
 
 
-void create_grid(GtkWidget *grid, HraciaPlocha *plocha, bool is_interactive, bool editor) {
-    // Pridanie súradníc ako hlavičky
+void create_grid(GtkWidget *grid, HraciaPlocha *plocha, bool is_interactive, GCallback callback) {
+    // Pridanie súradníc, ako hlavičky
     for (int i = 0; i <= 10; i++) {
         for (int j = 0; j <= 10; j++) {
             if (i == 0 && j == 0) {
@@ -51,14 +51,12 @@ void create_grid(GtkWidget *grid, HraciaPlocha *plocha, bool is_interactive, boo
                 GtkWidget *label = gtk_label_new(g_strdup_printf("%d", j));
                 // Pridanie CSS triedy
                 gtk_widget_set_name(label, "coordinate-label");
-
                 gtk_grid_attach(GTK_GRID(grid), label, j, i, 1, 1);
             } else if (j == 0) {
                 // Písmená na boku (A, B, C, ...)
                 GtkWidget *label = gtk_label_new(g_strdup_printf("%c", 'A' + i - 1));
                 // Pridanie CSS triedy
                 gtk_widget_set_name(label, "coordinate-label");
-
                 gtk_grid_attach(GTK_GRID(grid), label, j, i, 1, 1);
             } else {
                 // Tlačidlo pre mriežku
@@ -75,14 +73,11 @@ void create_grid(GtkWidget *grid, HraciaPlocha *plocha, bool is_interactive, boo
                 GtkWidget *image = gtk_image_new_from_pixbuf(sub_pixbuf);
                 gtk_button_set_image(GTK_BUTTON(button), image);
                 gtk_widget_set_name(button, "plocha");
-                if (is_interactive)
-                {
-                    if (editor) {
-                        g_signal_connect(button, "clicked", G_CALLBACK(suradnica_lodicky), plocha->hraciaPlocha[i - 1] + j - 1);
-                    } else {
-                        g_signal_connect(button, "clicked", G_CALLBACK(strela), plocha->hraciaPlocha[i - 1] + j - 1);
-                    }
+
+                if (is_interactive && callback != NULL) {
+                    g_signal_connect(button, "clicked", callback, &plocha->hraciaPlocha[i - 1][j - 1]);
                 }
+
                 gtk_grid_attach(GTK_GRID(grid), button, j, i, 1, 1);
 
                 // Uvoľnenie zdrojov
@@ -92,6 +87,7 @@ void create_grid(GtkWidget *grid, HraciaPlocha *plocha, bool is_interactive, boo
         }
     }
 }
+
 
 void create_main_layout(HraciaPlocha *hrac, HraciaPlocha *oponent) {
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -104,7 +100,7 @@ void create_main_layout(HraciaPlocha *hrac, HraciaPlocha *oponent) {
 
     // Oponentova hracia plocha (vľavo)
     oponentovaPlochaGrid = gtk_grid_new();
-    create_grid(oponentovaPlochaGrid, oponent, true,false);
+    create_grid(oponentovaPlochaGrid, oponent, true, G_CALLBACK(strela));
     gtk_grid_attach(GTK_GRID(mainGrid), oponentovaPlochaGrid, 0, 0, 1, 1);
 
     // Stredný panel (info o skóre, správy, stav hry)
@@ -115,7 +111,7 @@ void create_main_layout(HraciaPlocha *hrac, HraciaPlocha *oponent) {
 
     // Hracova hracia plocha (vpravo)
     hracovaPlochaGrid = gtk_grid_new();
-    create_grid(hracovaPlochaGrid, hrac,true,false);
+    create_grid(hracovaPlochaGrid, hrac,true,G_CALLBACK(strela));
     gtk_grid_attach(GTK_GRID(mainGrid), hracovaPlochaGrid, 2, 0, 1, 1);
 
     gtk_widget_show_all(window);
@@ -208,7 +204,7 @@ void open_ship_editor(HraciaPlocha *player_board) {
     editor_grid = gtk_grid_new();
     gtk_grid_attach(GTK_GRID(main_grid), editor_grid, 0, 0, 1, 1);
 
-    create_grid(editor_grid, player_board, true, true);
+    create_grid(editor_grid, player_board, true, G_CALLBACK(suradnica_lodicky));
 
     // Panel s lodičkami napravo
     GtkWidget *ships_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
@@ -254,6 +250,9 @@ void open_ship_editor(HraciaPlocha *player_board) {
     g_signal_connect(confirm_button, "clicked", G_CALLBACK(on_confirm_clicked), editor_window);
 
     gtk_widget_show_all(editor_window);
+
+    // Spustenie blokujúcej slučky pre editor
+    gtk_main();
 }
 
 

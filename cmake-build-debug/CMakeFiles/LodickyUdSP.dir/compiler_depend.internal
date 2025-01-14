@@ -792,6 +792,7 @@ CMakeFiles/LodickyUdSP.dir/GUI.c.o
 
 CMakeFiles/LodickyUdSP.dir/Game_Logic.c.o
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Game_Logic.c
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/GUI.h
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/HraciaPlocha.h
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Policko.h
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/TypPolickaEnum.h
@@ -2420,6 +2421,7 @@ CMakeFiles/LodickyUdSP.dir/Policko.c.o
 CMakeFiles/LodickyUdSP.dir/main.c.o
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/main.c
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/GUI.h
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Game_Logic.h
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/HraciaPlocha.h
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Policko.h
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/TypPolickaEnum.h
