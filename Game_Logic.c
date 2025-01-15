@@ -11,6 +11,7 @@ void initialize_css() {
         g_warning("CSS file not found or has errors");
     }
     gtk_style_context_add_provider_for_screen(gdk_screen_get_default(), GTK_STYLE_PROVIDER(provider),GTK_STYLE_PROVIDER_PRIORITY_USER);
+    g_object_unref(provider);
 }
 void initialize_game_state(GameState *state, char* player_name) {
     if (!state) {
@@ -23,8 +24,8 @@ void initialize_game_state(GameState *state, char* player_name) {
     init_player(hrac, player_name);
     init_player(opponent, "Oponent");
 
-    state->hrac = *hrac;
-    state->opponent = *opponent;
+    state->hrac = hrac;
+    state->opponent = opponent;
 
     state->hrac_score = 0;
     state->opponent_score = 0;
@@ -32,10 +33,10 @@ void initialize_game_state(GameState *state, char* player_name) {
 
     initialize_css();
 
-    open_ship_editor(&state->hrac); // Editor lodičiek pre hráča
+    open_ship_editor(state->hrac); // Editor lodičiek pre hráča
 
     // Vytvorenie hlavného GUI rozloženia
-    create_main_layout(&state->hrac, &state->opponent);
+    create_main_layout(state->hrac, state->opponent);
 
     // Spustenie hlavnej slučky GTK
     gtk_main();
@@ -43,6 +44,8 @@ void initialize_game_state(GameState *state, char* player_name) {
     // Uvoľnenie zdrojov
     destroy_player(hrac);
     destroy_player(opponent);
+    free(hrac);
+    free(opponent);
 }
 
 bool is_game_over(GameState *state) {

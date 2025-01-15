@@ -8,8 +8,8 @@
 #include "Hrac.h"
 // Štruktúra na reprezentáciu stavu hry
 typedef struct GameState {
-    Hrac hrac;                // Hráč
-    Hrac opponent;              // Oponent
+    Hrac* hrac;                // Hráč
+    Hrac* opponent;              // Oponent
     int hrac_score;            // Skóre hráča
     int opponent_score;          // Skóre oponenta
     bool game_over;              // Indikácia konca hry

@@ -68,6 +68,7 @@ void strela(GtkWidget *widget, gpointer data) {
 
     // Nastavenie stavu políčka, ako zasiahnutého
     setStrela(policko);
+    free(click_data);
 }
 
 
@@ -301,31 +302,6 @@ void on_confirm_clicked(GtkWidget *widget, gpointer data) {
 
     g_print("Lodičky hráča boli potvrdené a editor zatvorený.\n");
 }
-
-// void open_ship_editor(HraciaPlocha *player_board) {
-//     GtkWidget *editor_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-//     gtk_window_set_title(GTK_WINDOW(editor_window), "Editor lodičiek");
-//     gtk_window_set_default_size(GTK_WINDOW(editor_window), 800, 800);
-//
-//     g_signal_connect(editor_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
-//
-//     GtkWidget *editor_layout = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
-//     gtk_container_add(GTK_CONTAINER(editor_window), editor_layout);
-//
-//     editor_grid = gtk_grid_new();
-//     gtk_box_pack_start(GTK_BOX(editor_layout), editor_grid, TRUE, TRUE, 0);
-//
-//     create_grid(editor_grid, player_board,true,true);
-//
-//     confirm_button = gtk_button_new_with_label("Confirm");
-//     gtk_box_pack_start(GTK_BOX(editor_layout), confirm_button, FALSE, FALSE, 0);
-//
-//     g_signal_connect(confirm_button, "clicked", G_CALLBACK(on_confirm_clicked), editor_window);
-//
-//     gtk_widget_show_all(editor_window);
-//
-//     gtk_main();
-// }
 
 // Globálne premenné na uloženie kliknutých súradníc
 static int first_click_x = -1;

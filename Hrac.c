@@ -137,4 +137,7 @@ bool nastavLodicku(enum LodickaEnum typLodicky, int zX, int zY, int kX, int kY, 
 void destroy_player(Hrac* hrac) {
     destroy_hraciaPlocha(hrac->plocha);
     destroy_lode(hrac);
+    free(hrac->plocha);
+    hrac->plocha = NULL;
+
 }

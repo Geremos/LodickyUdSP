@@ -21,24 +21,6 @@ void init_hraciaPlocha(HraciaPlocha* hraciaPlocha)
     }
 }
 
-// Policko* getPolicko(int x, int y, HraciaPlocha* hraciaPlocha)
-// {
-//     if (x < 0 || x >= VELKOST_PLOCHY || y < 0 || y >= VELKOST_PLOCHY) {
-//         return NULL;
-//     }
-//     return &hraciaPlocha->hraciaPlocha[x][y];
-// }
-//
-// void vypis(HraciaPlocha* hraciaPlocha) {
-//     for (int i = 0; i < VELKOST_PLOCHY; i++) {
-//         for (int j = 0; j < VELKOST_PLOCHY; j++) {
-//             // Priamo vypíše znak reprezentovaný enumom TypPolickaEnum
-//             printf("%c ", hraciaPlocha->hraciaPlocha[i][j].typPolicka);
-//         }
-//         printf("\n");
-//     }
-// }
-
 void destroy_hraciaPlocha(HraciaPlocha* hraciaPlocha)
 {
     for (int i = 0; i < VELKOST_PLOCHY; i++)
