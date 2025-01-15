@@ -177,6 +177,30 @@ Game_Logic.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LodickyUdSP.dir/build.make CMakeFiles/LodickyUdSP.dir/Game_Logic.c.s
 .PHONY : Game_Logic.c.s
 
+Hrac.o: Hrac.c.o
+.PHONY : Hrac.o
+
+# target to build an object file
+Hrac.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LodickyUdSP.dir/build.make CMakeFiles/LodickyUdSP.dir/Hrac.c.o
+.PHONY : Hrac.c.o
+
+Hrac.i: Hrac.c.i
+.PHONY : Hrac.i
+
+# target to preprocess a source file
+Hrac.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LodickyUdSP.dir/build.make CMakeFiles/LodickyUdSP.dir/Hrac.c.i
+.PHONY : Hrac.c.i
+
+Hrac.s: Hrac.c.s
+.PHONY : Hrac.s
+
+# target to generate assembly for a file
+Hrac.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LodickyUdSP.dir/build.make CMakeFiles/LodickyUdSP.dir/Hrac.c.s
+.PHONY : Hrac.c.s
+
 HraciaPlocha.o: HraciaPlocha.c.o
 .PHONY : HraciaPlocha.o
 
@@ -264,6 +288,9 @@ help:
 	@echo "... Game_Logic.o"
 	@echo "... Game_Logic.i"
 	@echo "... Game_Logic.s"
+	@echo "... Hrac.o"
+	@echo "... Hrac.i"
+	@echo "... Hrac.s"
 	@echo "... HraciaPlocha.o"
 	@echo "... HraciaPlocha.i"
 	@echo "... HraciaPlocha.s"

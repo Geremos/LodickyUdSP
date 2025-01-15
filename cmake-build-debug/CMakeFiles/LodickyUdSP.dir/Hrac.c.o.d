@@ -1,7 +1,11 @@
-CMakeFiles/LodickyUdSP.dir/GUI.c.o: \
- /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/GUI.c \
+CMakeFiles/LodickyUdSP.dir/Hrac.c.o: \
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Hrac.c \
  /usr/include/stdc-predef.h \
- /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/gui.h \
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Hrac.h \
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/HraciaPlocha.h \
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Policko.h \
+ /usr/lib/gcc/x86_64-linux-gnu/14/include/stdbool.h \
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/TypPolickaEnum.h \
  /usr/include/gtk-3.0/gtk/gtk.h /usr/include/gtk-3.0/gdk/gdk.h \
  /usr/include/gtk-3.0/gdk/gdkconfig.h /usr/include/glib-2.0/glib.h \
  /usr/include/glib-2.0/glib/galloca.h /usr/include/glib-2.0/glib/gtypes.h \
@@ -661,7 +665,7 @@ CMakeFiles/LodickyUdSP.dir/GUI.c.o: \
  /usr/include/gtk-3.0/gtk/gtkshortcutsgroup.h \
  /usr/include/gtk-3.0/gtk/gtkshortcutssection.h \
  /usr/include/gtk-3.0/gtk/gtkshortcutsshortcut.h \
- /usr/include/gtk-3.0/gtk/gtkshow.h \
+ /usr/include/gtk-3.0/gtk/gtk.h /usr/include/gtk-3.0/gtk/gtkshow.h \
  /usr/include/gtk-3.0/gtk/gtkstacksidebar.h \
  /usr/include/gtk-3.0/gtk/gtkstack.h \
  /usr/include/gtk-3.0/gtk/gtksizerequest.h \
@@ -728,10 +732,4 @@ CMakeFiles/LodickyUdSP.dir/GUI.c.o: \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvscale.h \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvscrollbar.h \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvseparator.h \
- /usr/include/gtk-3.0/gtk/gtk-autocleanups.h \
- /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/HraciaPlocha.h \
- /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Policko.h \
- /usr/lib/gcc/x86_64-linux-gnu/14/include/stdbool.h \
- /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/TypPolickaEnum.h \
- /usr/include/gtk-3.0/gtk/gtk.h \
- /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Hrac.h
+ /usr/include/gtk-3.0/gtk/gtk-autocleanups.h

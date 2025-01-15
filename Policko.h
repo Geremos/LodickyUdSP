@@ -12,6 +12,7 @@ typedef struct Policko
     enum TypPolickaEnum typPolicka;
     enum LodickaEnum lodickaEnum;
     int poradieVlodi;
+    bool spracovane;
     bool strela;
     int x;
     int y;
@@ -23,8 +24,6 @@ int getX(Policko* policko);
 int getY(Policko* policko);
 bool getStrela(Policko* policko);
 void setStrela(Policko* policko);
-void setBarriera(Policko* policko);
-bool getBarriera(Policko* policko);
 enum TypPolickaEnum getTyp(Policko* policko);
 void setTypPolicka(enum TypPolickaEnum value, Policko* policko);
 void setLodicka(enum LodickaEnum value, Policko* policko);

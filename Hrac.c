@@ -26,9 +26,10 @@ void setHracMeno(Hrac* hrac, const char* meno) {
 }
 
 // Inicializácia hráča
-void initialize_player(Hrac *player, const char *name) {
+void init_player(Hrac *player, const char *name) {
     strcpy(player->meno, name);
     player->meno[sizeof(player->meno) - 1] = '\0'; // Bezpečnostné ukončenie reťazca
+    player->plocha = malloc(sizeof(HraciaPlocha));
     init_hraciaPlocha(player->plocha); // Inicializácia hracej plochy
 
     // Počet lodí každého typu na rozloženie
@@ -56,7 +57,7 @@ bool nastavLodicku(enum LodickaEnum typLodicky, int zX, int zY, int kX, int kY, 
     {
         for (int j = zY; j <= kY; j++)
         {
-            if (hrac->plocha.hraciaPlocha[i][j].lodickaEnum != noShip)
+            if (hrac->plocha->hraciaPlocha[i][j].lodickaEnum != noShip)
             {
                 return false;
             }
@@ -66,7 +67,16 @@ bool nastavLodicku(enum LodickaEnum typLodicky, int zX, int zY, int kX, int kY, 
     {
         for (int j = zY; j <= kY; j++)
         {
-            hrac->plocha.hraciaPlocha[i][j].lodickaEnum = typLodicky;
+            hrac->plocha->hraciaPlocha[i][j].lodickaEnum = typLodicky;
+        }
+    }
+    return true;
+}
+
+bool are_all_ships_placed(Hrac *hrac) {
+    for (int i = 0; i < 4; i++) {
+        if (hrac->lode[i] > 0) {
+            return false; // Niektoré lodičky ešte neboli rozložené
         }
     }
     return true;

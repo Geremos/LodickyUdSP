@@ -19,6 +19,8 @@ add_executable(LodickyUdSP main.c
         Game_Logic.h
         Game_Logic.c
         GUI.h
-        GUI.c)
+        GUI.c
+        Hrac.h
+        Hrac.c)
 
 target_link_libraries(LodickyUdSP ${GTK_LIBRARIES})

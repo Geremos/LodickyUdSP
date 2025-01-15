@@ -3,19 +3,12 @@
 // Entry point of the program
 #include "Game_Logic.h"
 
-void initialize_css() {
-    GtkCssProvider *provider = gtk_css_provider_new();
-    if (!gtk_css_provider_load_from_path(provider, "../Grafika/Style.css", NULL)) {
-        g_warning("CSS file not found or has errors");
-    }
-    gtk_style_context_add_provider_for_screen(gdk_screen_get_default(), GTK_STYLE_PROVIDER(provider),GTK_STYLE_PROVIDER_PRIORITY_USER);
-}
-
 int main(int argc, char *argv[]) {
     GameState state;
-    initialize_game_state(&state);
-
     gtk_init(&argc, &argv);
+    initialize_game_state(&state, "Juraj");
+
+
     return 0;
 }
 
