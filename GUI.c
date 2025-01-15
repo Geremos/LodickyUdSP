@@ -12,7 +12,9 @@ static GtkWidget *confirm_button;
 
 void strela(GtkWidget *widget, gpointer data) {
     // Získanie ukazovateľa na konkrétne políčko
-    Policko *policko = (Policko *)data;
+    Gui_Click_Data *click_data = (Gui_Click_Data *)data;
+    Hrac *hrac = click_data->hrac;
+    Policko *policko = &hrac->plocha->hraciaPlocha[click_data->x][click_data->y];
 
     g_print("Kliknuté na políčko: (%d, %d)\n", policko->x, policko->y);
 
@@ -22,21 +24,52 @@ void strela(GtkWidget *widget, gpointer data) {
         return;
     }
 
-    // Výber obrázka na základe stavu políčka
-    const char *image_path;
-    if (policko->lodickaEnum != noShip) {
-        image_path = "../GUI_res/lodicka.png"; // Zasiahnutá loď
-    } else {
-        image_path = "../GUI_res/strela.png"; // Výbuch na vode
+    // Načítanie pôvodného obrázka z tlačidla
+    GtkWidget *current_image = gtk_button_get_image(GTK_BUTTON(widget));
+    if (!current_image) {
+        g_print("Chyba: Tlačidlo nemá obrázok.\n");
+        return;
     }
 
-    // Aktualizácia obrázka tlačidla
-    GtkWidget *image = gtk_image_new_from_file(image_path);
-    gtk_button_set_image(GTK_BUTTON(widget), image);
+    GdkPixbuf *current_pixbuf = gtk_image_get_pixbuf(GTK_IMAGE(current_image));
+    if (!current_pixbuf) {
+        g_print("Chyba: Nepodarilo sa načítať pôvodný obrázok tlačidla.\n");
+        return;
+    }
+
+    // Načítanie obrázka strely
+    const char *image_path = "../Grafika/Trefa.png";
+    GdkPixbuf *shot_pixbuf = gdk_pixbuf_new_from_file(image_path, NULL);
+    if (!shot_pixbuf) {
+        g_print("Chyba: Nepodarilo sa načítať obrázok strely.\n");
+        return;
+    }
+
+    // Kombinácia pôvodného obrázka a obrázka strely
+    GdkPixbuf *combined_pixbuf = gdk_pixbuf_copy(current_pixbuf);
+    gdk_pixbuf_composite(
+        shot_pixbuf,               // Zdrojový pixbuf (strela)
+        combined_pixbuf,           // Cieľový pixbuf (existujúci obrázok)
+        0, 0,                      // Začiatok cieľového pixbufu
+        gdk_pixbuf_get_width(shot_pixbuf), gdk_pixbuf_get_height(shot_pixbuf), // Rozmery strely
+        0, 0,                      // Posun
+        1.0, 1.0,                  // Mierka (1:1)
+        GDK_INTERP_BILINEAR,       // Interpolácia
+        255                        // Priehľadnosť (255 = nepriehľadné)
+    );
+
+    // Nastavenie kombinovaného obrázka späť na tlačidlo
+    GtkWidget *new_image = gtk_image_new_from_pixbuf(combined_pixbuf);
+    gtk_button_set_image(GTK_BUTTON(widget), new_image);
+
+    // Uvoľnenie zdrojov
+    g_object_unref(combined_pixbuf);
+    g_object_unref(shot_pixbuf);
 
     // Nastavenie stavu políčka, ako zasiahnutého
     setStrela(policko);
 }
+
 
 
 void create_grid(GtkWidget *grid, Hrac* hrac, bool is_interactive, GCallback callback) {
@@ -224,39 +257,22 @@ void create_main_layout(Hrac *hrac, Hrac *oponent) {
 
     // Hracova hracia plocha (vpravo)
     hracovaPlochaGrid = gtk_grid_new();
-    create_grid(hracovaPlochaGrid, hrac, true, G_CALLBACK(strela));
+    create_grid(hracovaPlochaGrid, hrac, false, NULL);
     gtk_grid_attach(GTK_GRID(mainGrid), hracovaPlochaGrid, 2, 0, 1, 1);
 
     // Prechádzame cez hraciu plochu hráča
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j++) {
-            Policko *policko = &hrac->plocha->hraciaPlocha[i][j];
-
-            // Kontrola, či je na políčku časť lode a zároveň nebola spracovaná
-            if (policko->lodickaEnum != noShip && !policko->spracovane) {
-                // Určujeme, či je loď horizontálna alebo vertikálna
-                int start_x = i, start_y = j, end_x = i, end_y = j;
-
-                // Detekcia konca lode v smere riadku
-                while (end_y + 1 < 10 && hrac->plocha->hraciaPlocha[i][end_y + 1].lodickaEnum == policko->lodickaEnum) {
-                    end_y++;
-                }
-
-                // Detekcia konca lode v smere stĺpca
-                while (end_x + 1 < 10 && hrac->plocha->hraciaPlocha[end_x + 1][j].lodickaEnum == policko->lodickaEnum) {
-                    end_x++;
-                }
-
-                // Nastavíme políčka lode ako spracované
-                for (int x = start_x; x <= end_x; x++) {
-                    for (int y = start_y; y <= end_y; y++) {
-                        hrac->plocha->hraciaPlocha[x][y].spracovane = true;
-                    }
-                }
-
-                // Prekreslíme loď na hlavný grid
-                place_ship_on_grid(hracovaPlochaGrid, start_x, start_y, end_x, end_y);
-            }
+    int start_x = -1;
+    int start_y = -1;
+    int end_x = -1;
+    int end_y = -1;
+    // Prechádzame cez hraciu plochu hráča
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < i+1; j++) {
+            start_x = hrac->lode[i][j].start_x;
+            start_y = hrac->lode[i][j].start_y;
+            end_x = hrac->lode[i][j].end_x;
+            end_y = hrac->lode[i][j].end_y;
+            place_ship_on_grid(hracovaPlochaGrid, start_x, start_y, end_x, end_y);
         }
     }
 
@@ -368,7 +384,6 @@ void handle_ship_placement(GtkWidget *widget, gpointer data) {
         // Nastavenie lodičky na hracej ploche
         if (nastavLodicku(typLodicky, begin_x, begin_y, end_x, end_y, hrac)) {
             g_print("Lodička úspešne umiestnená!\n");
-            hrac->lode[typLodicky - 2]--; // Zníženie dostupného počtu lodí tohto typu
 
             // Aktualizácia GUI
             place_ship_on_grid(editor_grid, begin_x, begin_y, end_x, end_y);

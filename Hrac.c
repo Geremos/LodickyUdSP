@@ -111,22 +111,24 @@ bool nastavLodicku(enum LodickaEnum typLodicky, int zX, int zY, int kX, int kY, 
             }
         }
     }
-    for (int i = zX; i <= kX; i++)
-    {
-        for (int j = zY; j <= kY; j++)
-        {
-            hrac->plocha->hraciaPlocha[i][j].lodickaEnum = typLodicky;
-        }
-    }
-
+    bool lodicka_nastavena = false;
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < i+1; j++) {
-            if (hrac->lode[i][j].typLodicky == typLodicky && !hrac->lode[i][j].spracovane) {
+            if (hrac->lode[i][j].typLodicky == typLodicky && !hrac->lode[i][j].spracovane && !lodicka_nastavena) {
                 init_lodicka(&hrac->lode[i][j], zX, zY, kX, kY, typLodicky, true);
-                return true;
+                lodicka_nastavena = true;
             }
         }
     }
+    if (lodicka_nastavena) {
+        for (int i = zX; i <= kX; i++) {
+            for (int j = zY; j <= kY; j++) {
+                hrac->plocha->hraciaPlocha[i][j].lodickaEnum = typLodicky;
+            }
+        }
+        return true;
+    }
+
     printf("Nie je dostupná loď tohto typu!\n");
     return false;
 }
