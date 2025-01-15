@@ -1,7 +1,7 @@
 CMakeFiles/LodickyUdSP.dir/GUI.c.o: \
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/GUI.c \
  /usr/include/stdc-predef.h \
- /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/gui.h \
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/GUI.h \
  /usr/include/gtk-3.0/gtk/gtk.h /usr/include/gtk-3.0/gdk/gdk.h \
  /usr/include/gtk-3.0/gdk/gdkconfig.h /usr/include/glib-2.0/glib.h \
  /usr/include/glib-2.0/glib/galloca.h /usr/include/glib-2.0/glib/gtypes.h \

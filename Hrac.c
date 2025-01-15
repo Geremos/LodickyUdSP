@@ -16,13 +16,64 @@ char* getHracMeno(Hrac* hrac) {
 }
 
 // Získanie počtu lodí hráča
-int* getLode(Hrac* hrac) {
+Lodicka** getLode(Hrac* hrac){
     return hrac->lode;
+}
+
+// Pridanie lodičky do hráča
+void add_ship(Hrac* hrac, Lodicka* lodicka)
+{
+    hrac->lode[lodicka->typLodicky - 2]++;
 }
 
 // Nastavenie mena hráča
 void setHracMeno(Hrac* hrac, const char* meno) {
     strcpy(hrac->meno, meno);
+}
+
+// Inicializácia lodičky
+void init_lodicka(Lodicka* lodicka, int start_x, int start_y, int end_x, int end_y, enum LodickaEnum typLodicky, bool spracovane) {
+    lodicka->start_x = start_x;
+    lodicka->start_y = start_y;
+    lodicka->end_x = end_x;
+    lodicka->end_y = end_y;
+    lodicka->typLodicky = typLodicky;
+    lodicka->spracovane = spracovane;
+}
+
+void nastav_lode_pre_hraca(Hrac* hrac) {
+    // Počet lodí rôznych typov
+
+    // Alokácia pamäte pre lode
+    hrac->lode = malloc( 4 * sizeof(Lodicka*));
+    int pom = Battlecruiser;
+    // Pre každú veľkosť lode nastavíme lodí
+    for (int i = 0; i < 4; i++) {
+        hrac->lode[i] = malloc((i+1) * sizeof(Lodicka));
+        for (int j = 0; j < i+1; j++) {
+            init_lodicka(&hrac->lode[i][j], 0, 0, 0, 0, pom, false);
+        }
+        pom--;
+    }
+}
+
+void destroy_lode(Hrac* hrac) {
+    for (int i = 0; i < 4; i++) {
+        free(hrac->lode[i]);
+    }
+    free(hrac->lode);
+    hrac->lode = NULL;
+}
+
+bool are_all_ships_done(Hrac* hrac) {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < i+1; j++) {
+            if (!hrac->lode[i][j].spracovane) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 // Inicializácia hráča
@@ -31,13 +82,10 @@ void init_player(Hrac *player, const char *name) {
     player->meno[sizeof(player->meno) - 1] = '\0'; // Bezpečnostné ukončenie reťazca
     player->plocha = malloc(sizeof(HraciaPlocha));
     init_hraciaPlocha(player->plocha); // Inicializácia hracej plochy
-
+    nastav_lode_pre_hraca(player);
     // Počet lodí každého typu na rozloženie
-    player->lode[0] = 4; // 4 lode dĺžky 1
-    player->lode[1] = 3; // 3 lode dĺžky 2
-    player->lode[2] = 2; // 2 lode dĺžky 3
-    player->lode[3] = 1; // 1 loď dĺžky 4
 }
+
 
 bool nastavLodicku(enum LodickaEnum typLodicky, int zX, int zY, int kX, int kY, Hrac* hrac)
 {
@@ -70,19 +118,21 @@ bool nastavLodicku(enum LodickaEnum typLodicky, int zX, int zY, int kX, int kY, 
             hrac->plocha->hraciaPlocha[i][j].lodickaEnum = typLodicky;
         }
     }
-    return true;
-}
 
-bool are_all_ships_placed(Hrac *hrac) {
     for (int i = 0; i < 4; i++) {
-        if (hrac->lode[i] > 0) {
-            return false; // Niektoré lodičky ešte neboli rozložené
+        for (int j = 0; j < i+1; j++) {
+            if (hrac->lode[i][j].typLodicky == typLodicky && !hrac->lode[i][j].spracovane) {
+                init_lodicka(&hrac->lode[i][j], zX, zY, kX, kY, typLodicky, true);
+                return true;
+            }
         }
     }
-    return true;
+    printf("Nie je dostupná loď tohto typu!\n");
+    return false;
 }
 
 // Uvoľnenie pamäte hráča
 void destroy_player(Hrac* hrac) {
     destroy_hraciaPlocha(hrac->plocha);
+    destroy_lode(hrac);
 }

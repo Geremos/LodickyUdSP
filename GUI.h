@@ -25,4 +25,6 @@ void open_ship_editor(Hrac *hrac);
 void create_editor_grid(GtkWidget *grid, Hrac *hrac);
 void handle_ship_placement(GtkWidget *widget, gpointer data);
 void place_ship_on_grid(GtkWidget *grid, int start_x, int start_y, int end_x, int end_y);
+bool are_all_ships_done(Hrac* hrac);
+
 #endif // GUI_H

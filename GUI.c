@@ -1,7 +1,7 @@
 //
 // Created by juraj on 13. 1. 2025.
 //
-#include "gui.h"
+#include "GUI.h"
 
 
 static GtkWidget *oponentovaPlochaGrid;
@@ -100,7 +100,7 @@ void create_grid(GtkWidget *grid, Hrac* hrac, bool is_interactive, GCallback cal
 gboolean on_editor_window_close(GtkWidget *widget, GdkEvent *event, gpointer data) {
     Hrac *hrac = (Hrac *)data;
 
-    if (!are_all_ships_placed(hrac)) {
+    if (!are_all_ships_done(hrac)) {
         GtkWidget *dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
                                                    "Nemôžete zatvoriť editor, kým nerozložíte všetky lodičky!");
         gtk_dialog_run(GTK_DIALOG(dialog));
@@ -269,7 +269,7 @@ void on_confirm_clicked(GtkWidget *widget, gpointer data) {
     Hrac *hrac = (Hrac *)data;
 
     // Kontrola, či hráč rozložil všetky lodičky
-    if (!are_all_ships_placed(hrac)) {
+    if (!are_all_ships_done(hrac)) {
         GtkWidget *dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
                                                    "Nemôžete potvrdiť, kým nerozložíte všetky lodičky!");
         gtk_dialog_run(GTK_DIALOG(dialog));
@@ -412,21 +412,22 @@ void open_ship_editor(Hrac *hrac) {
     gtk_box_pack_start(GTK_BOX(ships_box), description_label, FALSE, FALSE, 0);
 
     const char *ship_images[] = {
-        "../Grafika/Lodicka2_H.png",
-        "../Grafika/Lodicka3_H.png",
+        "../Grafika/Lodicka5_H.png",
         "../Grafika/Lodicka4_H.png",
-        "../Grafika/Lodicka5_H.png"
+        "../Grafika/Lodicka3_H.png",
+        "../Grafika/Lodicka2_H.png"
     };
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 1; i <= 4; i++) {
         GtkWidget *ship_row = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
         gtk_box_pack_start(GTK_BOX(ships_box), ship_row, FALSE, FALSE, 0);
 
-        GtkWidget *ship_image = gtk_image_new_from_file(ship_images[i]);
+        GtkWidget *ship_image = gtk_image_new_from_file(ship_images[i-1]);
         gtk_box_pack_start(GTK_BOX(ship_row), ship_image, FALSE, FALSE, 0);
 
         char count_text[20];
-        snprintf(count_text, sizeof(count_text), "x %d", hrac->lode[i]);
+
+        snprintf(count_text, sizeof(count_text), "x %d", i);
         GtkWidget *ship_count_label = gtk_label_new(count_text);
         gtk_widget_set_name(ship_count_label, "coordinate-label");
 
