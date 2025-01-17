@@ -728,9 +728,9 @@ CMakeFiles/LodickyUdSP.dir/main.c.o: \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvscrollbar.h \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvseparator.h \
  /usr/include/gtk-3.0/gtk/gtk-autocleanups.h \
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Hrac.h \
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/HraciaPlocha.h \
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Policko.h \
  /usr/lib/gcc/x86_64-linux-gnu/14/include/stdbool.h \
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/TypPolickaEnum.h \
- /usr/include/gtk-3.0/gtk/gtk.h \
- /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Hrac.h
+ /usr/include/gtk-3.0/gtk/gtk.h

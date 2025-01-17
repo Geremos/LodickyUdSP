@@ -19,8 +19,7 @@ typedef struct HraciaPlocha
 } HraciaPlocha;
 
 void init_hraciaPlocha(HraciaPlocha* hraciaPlocha);
-Policko* getPolicko(int x, int y, HraciaPlocha* hraciaPlocha);
-void vypis(HraciaPlocha* hraciaPlocha);
+const Policko* getPolicko(int x, int y, HraciaPlocha* hraciaPlocha);
 void destroy_hraciaPlocha(HraciaPlocha* hraciaPlocha);
-
+void setTypPolickaNaPloche(enum TypPolickaEnum typ, int x, int y, HraciaPlocha* hraciaPlocha);
 #endif //HRACIAPLOCHA_H

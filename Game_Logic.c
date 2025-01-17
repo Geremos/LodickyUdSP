@@ -21,8 +21,8 @@ void initialize_game_state(GameState *state, char* player_name) {
     // Inicializácia hráčskej a súperovej plochy
     Hrac* hrac = malloc(sizeof(Hrac));
     Hrac* opponent = malloc(sizeof(Hrac));
-    init_player(hrac, player_name);
-    init_player(opponent, "Oponent");
+    init_hrac(hrac, player_name);
+    init_hrac(opponent, "Oponent");
 
     state->hrac = hrac;
     state->opponent = opponent;
@@ -33,7 +33,7 @@ void initialize_game_state(GameState *state, char* player_name) {
 
     initialize_css();
 
-    open_ship_editor(state->hrac); // Editor lodičiek pre hráča
+    create_main_window(hrac);
 
     // Vytvorenie hlavného GUI rozloženia
     create_main_layout(state->hrac, state->opponent);

@@ -32,6 +32,16 @@ void destroy_hraciaPlocha(HraciaPlocha* hraciaPlocha)
     hraciaPlocha->hraciaPlocha = NULL;
 }
 
+const Policko* getPolicko(int x, int y, HraciaPlocha* hraciaPlocha)
+{
+    return &hraciaPlocha->hraciaPlocha[x][y];
+}
+
+void setTypPolickaNaPloche(enum TypPolickaEnum typ, int x, int y, HraciaPlocha* hraciaPlocha)
+{
+   setTypPolicka(typ, &hraciaPlocha->hraciaPlocha[x][y]);
+}
+
 
 
 

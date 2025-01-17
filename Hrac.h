@@ -8,7 +8,7 @@
 
 
 
-typedef struct {
+typedef struct Lodicka{
     int start_x;
     int start_y;
     int end_x;
@@ -25,7 +25,7 @@ typedef struct Hrac {
 } Hrac;
 
 // Funkcie na správu hráča
-void init_player(Hrac *player, const char *name);
+void init_hrac(Hrac *hrac, const char *name);
 void init_lodicka(Lodicka* lodicka, int start_x, int start_y, int end_x, int end_y, enum LodickaEnum typLodicky, bool spracovane);
 bool nastavLodicku(enum LodickaEnum typLodicky, int zX, int zY, int kX, int kY, Hrac* hrac);
 HraciaPlocha* getHraciaPlocha(Hrac* hrac);

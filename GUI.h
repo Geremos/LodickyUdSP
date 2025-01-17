@@ -5,7 +5,6 @@
 #define GUI_H
 // Inicializácia GUI
 #include <gtk/gtk.h>
-#include "HraciaPlocha.h"
 #include "Hrac.h"
 
 typedef struct  Gui_Click_Data
@@ -26,5 +25,7 @@ void create_editor_grid(GtkWidget *grid, Hrac *hrac);
 void handle_ship_placement(GtkWidget *widget, gpointer data);
 void place_ship_on_grid(GtkWidget *grid, int start_x, int start_y, int end_x, int end_y);
 bool are_all_ships_done(Hrac* hrac);
+void create_main_window(Hrac* hrac);
+void on_start_game_clicked(GtkWidget *widget, gpointer data);
 
 #endif // GUI_H

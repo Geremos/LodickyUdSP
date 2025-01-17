@@ -84,13 +84,17 @@ void create_grid(GtkWidget *grid, Hrac* hrac, bool is_interactive, GCallback cal
                 gtk_grid_attach(GTK_GRID(grid), empty_label, j, i, 1, 1);
             } else if (i == 0) {
                 // Čísla hore (1, 2, 3, ...)
-                GtkWidget *label = gtk_label_new(g_strdup_printf("%d", j));
+                char *text = g_strdup_printf("%d", j);
+                GtkWidget *label = gtk_label_new(text);
+                g_free(text); // Uvoľníme pamäť po použití
                 // Pridanie CSS triedy
                 gtk_widget_set_name(label, "coordinate-label");
                 gtk_grid_attach(GTK_GRID(grid), label, j, i, 1, 1);
             } else if (j == 0) {
                 // Písmená na boku (A, B, C, ...)
-                GtkWidget *label = gtk_label_new(g_strdup_printf("%c", 'A' + i - 1));
+                char *text = g_strdup_printf("%c", 'A' + i - 1);
+                GtkWidget *label = gtk_label_new(text);
+                g_free(text);
                 // Pridanie CSS triedy
                 gtk_widget_set_name(label, "coordinate-label");
                 gtk_grid_attach(GTK_GRID(grid), label, j, i, 1, 1);
@@ -299,8 +303,6 @@ void on_confirm_clicked(GtkWidget *widget, gpointer data) {
     gtk_widget_destroy(editor_window); // Zničí okno editoru
 
     g_print("Lodičky hráča boli potvrdené a editor zatvorený.\n");
-
-    g_print("Lodičky hráča boli potvrdené a editor zatvorený.\n");
 }
 
 // Globálne premenné na uloženie kliknutých súradníc
@@ -437,6 +439,72 @@ void open_ship_editor(Hrac *hrac) {
 
     gtk_widget_show_all(editor_window);
 
+    // Spustenie blokujúcej slučky pre editor
+    gtk_main();
+}
+
+void on_start_game_clicked(GtkWidget *widget, gpointer data) {
+    // Simulácia úspešného pripojenia na server
+    int result = 1; // 1 = úspech, 0 = druhý hráč nie je pripojený, -1 = chyba
+    Hrac *hrac = (Hrac *)data;
+
+    if (result == 1) {
+        g_print("Druhý hráč je pripojený. Spúšťame hru...\n");
+
+        // Zavretie aktuálneho okna (okno s tlačidlom)
+        GtkWidget *toplevel = gtk_widget_get_toplevel(widget);
+        if (gtk_widget_is_toplevel(toplevel)) {
+            gtk_widget_destroy(toplevel); // Zničí hlavné okno
+        }
+
+        // Otvorenie editoru lodí
+        open_ship_editor(hrac);
+    } else if (result == 0) {
+        GtkWidget *dialog = gtk_message_dialog_new(
+            NULL,
+            GTK_DIALOG_MODAL,
+            GTK_MESSAGE_ERROR,
+            GTK_BUTTONS_OK,
+            "Druhý hráč nie je pripojený. Skúste neskôr."
+        );
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+    } else {
+        GtkWidget *dialog = gtk_message_dialog_new(
+            NULL,
+            GTK_DIALOG_MODAL,
+            GTK_MESSAGE_ERROR,
+            GTK_BUTTONS_OK,
+            "Chyba pri pripojení na server."
+        );
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+    }
+}
+
+
+void create_main_window(Hrac* hrac) {
+    GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(window), "Battleships - Úvodné okno");
+    gtk_window_set_default_size(GTK_WINDOW(window), 400, 300);
+    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+
+    // Hlavný box
+    GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+    gtk_container_add(GTK_CONTAINER(window), box);
+
+    // Popis
+    GtkWidget *label = gtk_label_new("Vitajte v hre Battleships! Kliknite na tlačidlo pre začiatok hry.");
+    gtk_box_pack_start(GTK_BOX(box), label, TRUE, TRUE, 0);
+
+    // Tlačidlo na začatie hry
+    GtkWidget *start_button = gtk_button_new_with_label("Začať hru");
+    gtk_box_pack_start(GTK_BOX(box), start_button, TRUE, TRUE, 0);
+
+    // Callback funkcia pre tlačidlo
+    g_signal_connect(start_button, "clicked", G_CALLBACK(on_start_game_clicked), hrac);
+
+    gtk_widget_show_all(window);
     // Spustenie blokujúcej slučky pre editor
     gtk_main();
 }

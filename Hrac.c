@@ -77,12 +77,12 @@ bool are_all_ships_done(Hrac* hrac) {
 }
 
 // Inicializácia hráča
-void init_player(Hrac *player, const char *name) {
-    strcpy(player->meno, name);
-    player->meno[sizeof(player->meno) - 1] = '\0'; // Bezpečnostné ukončenie reťazca
-    player->plocha = malloc(sizeof(HraciaPlocha));
-    init_hraciaPlocha(player->plocha); // Inicializácia hracej plochy
-    nastav_lode_pre_hraca(player);
+void init_hrac(Hrac *hrac, const char *name) {
+    strcpy(hrac->meno, name);
+    hrac->meno[sizeof(hrac->meno) - 1] = '\0'; // Bezpečnostné ukončenie reťazca
+    hrac->plocha = malloc(sizeof(HraciaPlocha));
+    init_hraciaPlocha(hrac->plocha); // Inicializácia hracej plochy
+    nastav_lode_pre_hraca(hrac);
     // Počet lodí každého typu na rozloženie
 }
 
