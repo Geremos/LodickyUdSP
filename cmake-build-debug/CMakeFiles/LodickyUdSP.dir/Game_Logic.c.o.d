@@ -735,4 +735,4 @@ CMakeFiles/LodickyUdSP.dir/Game_Logic.c.o: \
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Policko.h \
  /usr/lib/gcc/x86_64-linux-gnu/14/include/stdbool.h \
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/TypPolickaEnum.h \
- /usr/include/gtk-3.0/gtk/gtk.h
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/GenericMatrix.h

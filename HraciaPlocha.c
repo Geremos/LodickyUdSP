@@ -12,34 +12,44 @@
 // Tlačidlá pre hraciu plochu
 void init_hraciaPlocha(HraciaPlocha* hraciaPlocha)
 {
-    hraciaPlocha->hraciaPlocha = (Policko**)malloc(VELKOST_PLOCHY * sizeof(Policko*));
-    for (int i = 0; i < VELKOST_PLOCHY; i++) {
-        hraciaPlocha->hraciaPlocha[i] = (Policko*)malloc(VELKOST_PLOCHY * sizeof(Policko));
-        for (int j = 0; j < VELKOST_PLOCHY; j++) {
-            init_Policko(&hraciaPlocha->hraciaPlocha[i][j], i, j);
+    HraciaPlocha* hraciaPlocha = (HraciaPlocha*)malloc(sizeof(HraciaPlocha));
+    if (!hraciaPlocha) return;
+
+    // Vytvorenie generickej matice pre políčka
+    hraciaPlocha->hraciaPlocha = create_matrix(VELKOST_PLOCHY, VELKOST_PLOCHY, sizeof(Policko));
+    if (!hraciaPlocha->hraciaPlocha) {
+        free(hraciaPlocha);
+        return;
+    }
+
+    // Inicializácia políčok
+    for (size_t i = 0; i < VELKOST_PLOCHY; i++) {
+        for (size_t j = 0; j < VELKOST_PLOCHY; j++) {
+            Policko policko;
+            init_Policko(&policko, i, j);
+            set_element(hraciaPlocha->hraciaPlocha, i, j, &policko);
         }
     }
 }
 
 void destroy_hraciaPlocha(HraciaPlocha* hraciaPlocha)
 {
-    for (int i = 0; i < VELKOST_PLOCHY; i++)
-    {
-        free(hraciaPlocha->hraciaPlocha[i]);
-        hraciaPlocha->hraciaPlocha[i] = NULL;
-    }
-    free(hraciaPlocha->hraciaPlocha);
-    hraciaPlocha->hraciaPlocha = NULL;
+    if (!hraciaPlocha) return;
+    // Uvoľnenie generickej matice
+    destroy_matrix(hraciaPlocha->hraciaPlocha);
+    free(hraciaPlocha);
 }
 
 const Policko* getPolicko(int x, int y, HraciaPlocha* hraciaPlocha)
 {
-    return &hraciaPlocha->hraciaPlocha[x][y];
+    return (const Policko*)get_element(hraciaPlocha->hraciaPlocha, x, y);
 }
 
 void setTypPolickaNaPloche(enum TypPolickaEnum typ, int x, int y, HraciaPlocha* hraciaPlocha)
 {
-   setTypPolicka(typ, &hraciaPlocha->hraciaPlocha[x][y]);
+    Policko policko = *(Policko*)get_element(hraciaPlocha->hraciaPlocha, x, y);
+    setTypPolicka(typ, &policko );
+    set_element(hraciaPlocha->hraciaPlocha, x, y, &policko);
 }
 
 

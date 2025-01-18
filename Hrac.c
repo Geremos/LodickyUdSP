@@ -5,6 +5,9 @@
 
 #include "Hrac.h"
 
+#include <stdio.h>
+#include <string.h>
+
 // Získanie hracej plochy hráča
 HraciaPlocha* getHraciaPlocha(Hrac* hrac) {
     return hrac->plocha;

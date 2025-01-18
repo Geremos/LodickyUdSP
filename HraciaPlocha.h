@@ -10,16 +10,18 @@
 #ifndef HRACIAPLOCHA_H
 #define HRACIAPLOCHA_H
 #include "Policko.h"
-#include <gtk-3.0/gtk/gtk.h>
+#include "GenericMatrix.h"
+
 # define  VELKOST_PLOCHY  10
 
 typedef struct HraciaPlocha
 {
-    Policko** hraciaPlocha;
+    GenericMatrix* hraciaPlocha;
 } HraciaPlocha;
 
 void init_hraciaPlocha(HraciaPlocha* hraciaPlocha);
-const Policko* getPolicko(int x, int y, HraciaPlocha* hraciaPlocha);
 void destroy_hraciaPlocha(HraciaPlocha* hraciaPlocha);
+
+const Policko* getPolicko(int x, int y, HraciaPlocha* hraciaPlocha);
 void setTypPolickaNaPloche(enum TypPolickaEnum typ, int x, int y, HraciaPlocha* hraciaPlocha);
 #endif //HRACIAPLOCHA_H

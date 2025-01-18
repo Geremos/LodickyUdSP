@@ -20,15 +20,19 @@ typedef struct Policko
 
 
 void init_Policko(Policko* policko, int x, int y);
+void destroy_policko(Policko* policko);
+
 int getX(Policko* policko);
 int getY(Policko* policko);
+
 bool getStrela(Policko* policko);
 void setStrela(Policko* policko);
+
 enum TypPolickaEnum getTyp(Policko* policko);
 void setTypPolicka(enum TypPolickaEnum value, Policko* policko);
+
 void setLodicka(enum LodickaEnum value, Policko* policko);
 enum LodickaEnum getLodickaEnum(Policko* policko);
-void destroy_policko(Policko* policko);
 
 
 #endif //POLICKO_H

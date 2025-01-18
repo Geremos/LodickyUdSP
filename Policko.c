@@ -8,6 +8,7 @@
 
 void init_Policko(Policko* policko, int x, int y)
 {
+
     policko->x = x;
     policko->y = y;
     policko->strela = false;
