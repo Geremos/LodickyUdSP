@@ -15,8 +15,6 @@ GuiContext* create_gui_context(Hrac *hrac, Hrac *oponent) {
     gui->confirm_button = NULL;
     gui->hrac = hrac;
     gui->oponent = oponent;
-    gui->x = -1;
-    gui->y = -1;
     gui->first_click_x = -1;
     gui->first_click_y = -1;
     return gui;

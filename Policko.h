@@ -22,9 +22,6 @@ typedef struct Policko
 void init_Policko(Policko* policko, int x, int y);
 void destroy_policko(Policko* policko);
 
-int getX(Policko* policko);
-int getY(Policko* policko);
-
 bool getStrela(Policko* policko);
 void setStrela(Policko* policko);
 

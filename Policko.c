@@ -17,16 +17,6 @@ void init_Policko(Policko* policko, int x, int y)
 
 }
 
-int getX(Policko* policko)
-{
-    return policko->x;
-}
-
-int getY(Policko* policko)
-{
-    return policko->y;
-}
-
 bool getStrela(Policko* policko)
 {
     return policko->strela;

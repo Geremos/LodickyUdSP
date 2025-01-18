@@ -17,8 +17,6 @@ typedef struct GuiContext {
     GtkWidget *confirm_button;
     Hrac *hrac;
     Hrac *oponent;
-    int x;
-    int y;
     int first_click_x;
     int first_click_y;
 } GuiContext;
