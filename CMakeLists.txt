@@ -26,6 +26,9 @@ add_executable(LodickyUdSP main.c
         GUI.h
         GUI.c
         Hrac.h
-        Hrac.c)
+        Hrac.c
+        GenericMatrix.h
+        GenericMatrix.c
+        )
 
 target_link_libraries(LodickyUdSP ${GTK_LIBRARIES})

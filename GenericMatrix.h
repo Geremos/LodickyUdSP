@@ -8,7 +8,7 @@
 #define GENERIC_MATRIX_H
 
 #include <stdlib.h>
-
+#include "Policko.h"
 // Generická štruktúra matice
 typedef struct {
     void** data;      // Ukazovateľ na dáta

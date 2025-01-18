@@ -1,10 +1,6 @@
-CMakeFiles/LodickyUdSP.dir/HraciaPlocha.c.o: \
- /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/HraciaPlocha.c \
+CMakeFiles/LodickyUdSP.dir/GenericMatrix.c.o: \
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/GenericMatrix.c \
  /usr/include/stdc-predef.h \
- /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/HraciaPlocha.h \
- /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Policko.h \
- /usr/lib/gcc/x86_64-linux-gnu/14/include/stdbool.h \
- /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/TypPolickaEnum.h \
  /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/GenericMatrix.h \
  /usr/include/stdlib.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
@@ -45,8 +41,11 @@ CMakeFiles/LodickyUdSP.dir/HraciaPlocha.c.o: \
  /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
  /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
  /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /usr/include/alloca.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib-float.h /usr/include/stdio.h \
- /usr/lib/gcc/x86_64-linux-gnu/14/include/stdarg.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/Policko.h \
+ /usr/lib/gcc/x86_64-linux-gnu/14/include/stdbool.h \
+ /mnt/c/Users/juraj/Desktop/UdSP/LodickyUdSP/TypPolickaEnum.h \
+ /usr/include/stdio.h /usr/lib/gcc/x86_64-linux-gnu/14/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h \
@@ -54,4 +53,7 @@ CMakeFiles/LodickyUdSP.dir/HraciaPlocha.c.o: \
  /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
- /usr/include/x86_64-linux-gnu/bits/stdio_lim.h
+ /usr/include/x86_64-linux-gnu/bits/stdio_lim.h /usr/include/string.h \
+ /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
+ /usr/include/strings.h

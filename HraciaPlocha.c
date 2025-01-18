@@ -7,12 +7,12 @@
 
 #include "HraciaPlocha.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
 // Tlačidlá pre hraciu plochu
 void init_hraciaPlocha(HraciaPlocha* hraciaPlocha)
 {
-    HraciaPlocha* hraciaPlocha = (HraciaPlocha*)malloc(sizeof(HraciaPlocha));
     if (!hraciaPlocha) return;
 
     // Vytvorenie generickej matice pre políčka
@@ -25,9 +25,9 @@ void init_hraciaPlocha(HraciaPlocha* hraciaPlocha)
     // Inicializácia políčok
     for (size_t i = 0; i < VELKOST_PLOCHY; i++) {
         for (size_t j = 0; j < VELKOST_PLOCHY; j++) {
-            Policko policko;
-            init_Policko(&policko, i, j);
-            set_element(hraciaPlocha->hraciaPlocha, i, j, &policko);
+            Policko policko; // Lokálny objekt
+            init_Policko(&policko, i, j); // Inicializujeme hodnoty
+            set_element(hraciaPlocha->hraciaPlocha, i, j, &policko); // Uložíme do matice
         }
     }
 }
@@ -40,13 +40,21 @@ void destroy_hraciaPlocha(HraciaPlocha* hraciaPlocha)
     free(hraciaPlocha);
 }
 
-const Policko* getPolicko(int x, int y, HraciaPlocha* hraciaPlocha)
+Policko* getPolicko(int x, int y, HraciaPlocha* hraciaPlocha)
 {
-    return (const Policko*)get_element(hraciaPlocha->hraciaPlocha, x, y);
+    if (!hraciaPlocha || x < 0 || x >= VELKOST_PLOCHY || y < 0 || y >= VELKOST_PLOCHY) {
+        printf("Chyba: Neplatné súradnice (%d, %d)\n", x, y);
+        return NULL;
+    }
+    return (Policko*)get_element(hraciaPlocha->hraciaPlocha, x, y);
 }
 
 void setTypPolickaNaPloche(enum TypPolickaEnum typ, int x, int y, HraciaPlocha* hraciaPlocha)
 {
+    if (!hraciaPlocha || x < 0 || x >= VELKOST_PLOCHY || y < 0 || y >= VELKOST_PLOCHY) {
+        printf("Chyba: Neplatné súradnice (%d, %d)\n", x, y);
+        return;
+    }
     Policko policko = *(Policko*)get_element(hraciaPlocha->hraciaPlocha, x, y);
     setTypPolicka(typ, &policko );
     set_element(hraciaPlocha->hraciaPlocha, x, y, &policko);

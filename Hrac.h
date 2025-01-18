@@ -26,13 +26,15 @@ typedef struct Hrac {
 
 // Funkcie na správu hráča
 void init_hrac(Hrac *hrac, const char *name);
+void destroy_hrac(Hrac* hrac);
+
 void init_lodicka(Lodicka* lodicka, int start_x, int start_y, int end_x, int end_y, enum LodickaEnum typLodicky, bool spracovane);
+
 bool nastavLodicku(enum LodickaEnum typLodicky, int zX, int zY, int kX, int kY, Hrac* hrac);
 HraciaPlocha* getHraciaPlocha(Hrac* hrac);
-char* getHracMeno(Hrac* hrac);
+const char* getHracMeno(Hrac* hrac);
 Lodicka** getLode(Hrac* hrac);
 void destroy_Lode(Hrac* hrac);
 void setHracMeno(Hrac* hrac, const char* meno);
-void destroy_player(Hrac* hrac);
 bool are_all_ships_placed(Hrac *hrac);
 #endif //HRAC_H

@@ -14,19 +14,13 @@ HraciaPlocha* getHraciaPlocha(Hrac* hrac) {
 }
 
 // Získanie mena hráča
-char* getHracMeno(Hrac* hrac) {
+const char* getHracMeno(Hrac* hrac) {
     return hrac->meno;
 }
 
 // Získanie počtu lodí hráča
 Lodicka** getLode(Hrac* hrac){
     return hrac->lode;
-}
-
-// Pridanie lodičky do hráča
-void add_ship(Hrac* hrac, Lodicka* lodicka)
-{
-    hrac->lode[lodicka->typLodicky - 2]++;
 }
 
 // Nastavenie mena hráča
@@ -81,9 +75,16 @@ bool are_all_ships_done(Hrac* hrac) {
 
 // Inicializácia hráča
 void init_hrac(Hrac *hrac, const char *name) {
-    strcpy(hrac->meno, name);
+    strncpy(hrac->meno, name, sizeof(hrac->meno) - 1);
     hrac->meno[sizeof(hrac->meno) - 1] = '\0'; // Bezpečnostné ukončenie reťazca
+
+    // Alokácia pamäte pre hraciu plochu
     hrac->plocha = malloc(sizeof(HraciaPlocha));
+    if (!hrac->plocha) {
+        fprintf(stderr, "Chyba: Nepodarilo sa alokovať pamäť pre hraciu plochu\n");
+        return;
+    }
+
     init_hraciaPlocha(hrac->plocha); // Inicializácia hracej plochy
     nastav_lode_pre_hraca(hrac);
     // Počet lodí každého typu na rozloženie
@@ -92,41 +93,41 @@ void init_hrac(Hrac *hrac, const char *name) {
 
 bool nastavLodicku(enum LodickaEnum typLodicky, int zX, int zY, int kX, int kY, Hrac* hrac)
 {
-    if (zX < 0 || zY < 0 || kX < 0 || kY < 0 || zX >= VELKOST_PLOCHY || zY >= VELKOST_PLOCHY || kX >= VELKOST_PLOCHY || kY >= VELKOST_PLOCHY)
-    {
+    if (zX < 0 || zY < 0 || kX < 0 || kY < 0 || zX >= VELKOST_PLOCHY || zY >= VELKOST_PLOCHY || kX >= VELKOST_PLOCHY || kY >= VELKOST_PLOCHY) {
         return false;
     }
-    if (zX > kX || zY > kY)
-    {
+    if (zX > kX || zY > kY) {
         return false;
     }
-    if (kX - zX != typLodicky - 1 && kY - zY != typLodicky - 1)
-    {
+    if (kX - zX != typLodicky - 1 && kY - zY != typLodicky - 1) {
         return false;
     }
-    for (int i = zX; i <= kX; i++)
-    {
-        for (int j = zY; j <= kY; j++)
-        {
-            if (hrac->plocha->hraciaPlocha[i][j].lodickaEnum != noShip)
-            {
+
+    for (int i = zX; i <= kX; i++) {
+        for (int j = zY; j <= kY; j++) {
+            Policko* policko = (Policko*)get_element(getHraciaPlocha(hrac)->hraciaPlocha, i, j);
+            if (getLodickaEnum(policko) != noShip) {
                 return false;
             }
         }
     }
+
     bool lodicka_nastavena = false;
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < i+1; j++) {
-            if (hrac->lode[i][j].typLodicky == typLodicky && !hrac->lode[i][j].spracovane && !lodicka_nastavena) {
+    for (int i = 0; i < 4 && !lodicka_nastavena; i++) {
+        for (int j = 0; j < i + 1; j++) {
+            if (hrac->lode[i][j].typLodicky == typLodicky && !hrac->lode[i][j].spracovane) {
                 init_lodicka(&hrac->lode[i][j], zX, zY, kX, kY, typLodicky, true);
                 lodicka_nastavena = true;
+                break;
             }
         }
     }
+
     if (lodicka_nastavena) {
         for (int i = zX; i <= kX; i++) {
             for (int j = zY; j <= kY; j++) {
-                hrac->plocha->hraciaPlocha[i][j].lodickaEnum = typLodicky;
+                Policko* policko = (Policko*)get_element(getHraciaPlocha(hrac)->hraciaPlocha, i, j);
+                setLodicka(typLodicky, policko );
             }
         }
         return true;
@@ -137,10 +138,8 @@ bool nastavLodicku(enum LodickaEnum typLodicky, int zX, int zY, int kX, int kY, 
 }
 
 // Uvoľnenie pamäte hráča
-void destroy_player(Hrac* hrac) {
+void destroy_hrac(Hrac* hrac) {
     destroy_hraciaPlocha(hrac->plocha);
     destroy_lode(hrac);
-    free(hrac->plocha);
     hrac->plocha = NULL;
-
 }

@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/LodickyUdSP.dir/GUI.c.o.d"
   "CMakeFiles/LodickyUdSP.dir/Game_Logic.c.o"
   "CMakeFiles/LodickyUdSP.dir/Game_Logic.c.o.d"
+  "CMakeFiles/LodickyUdSP.dir/GenericMatrix.c.o"
+  "CMakeFiles/LodickyUdSP.dir/GenericMatrix.c.o.d"
   "CMakeFiles/LodickyUdSP.dir/Hrac.c.o"
   "CMakeFiles/LodickyUdSP.dir/Hrac.c.o.d"
   "CMakeFiles/LodickyUdSP.dir/HraciaPlocha.c.o"

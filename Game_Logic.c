@@ -32,18 +32,17 @@ void initialize_game_state(GameState *state, char* player_name) {
     state->game_over = false;
 
     initialize_css();
+    GuiContext *gui = create_gui_context(hrac, opponent);
 
-    create_main_window(hrac);
-
-    // Vytvorenie hlavného GUI rozloženia
-    create_main_layout(state->hrac, state->opponent);
+    create_main_window(gui);
 
     // Spustenie hlavnej slučky GTK
     gtk_main();
 
     // Uvoľnenie zdrojov
-    destroy_player(hrac);
-    destroy_player(opponent);
+    destroy_gui_context(gui);
+    destroy_hrac(hrac);
+    destroy_hrac(opponent);
     free(hrac);
     free(opponent);
 }

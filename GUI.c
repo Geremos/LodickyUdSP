@@ -3,23 +3,38 @@
 //
 #include "GUI.h"
 
+GuiContext* create_gui_context(Hrac *hrac, Hrac *oponent) {
+    GuiContext *gui = malloc(sizeof(GuiContext));
+    if (!gui) return NULL;
 
-static GtkWidget *oponentovaPlochaGrid;
-static GtkWidget *hracovaPlochaGrid;
-static GtkWidget *infoBox; // Stredný panel so skóre a informáciami
-static GtkWidget *editor_grid;
-static GtkWidget *confirm_button;
+    gui->main_window = NULL;
+    gui->oponentovaPlochaGrid = NULL;
+    gui->hracovaPlochaGrid = NULL;
+    gui->infoBox = NULL;
+    gui->editor_grid = NULL;
+    gui->confirm_button = NULL;
+    gui->hrac = hrac;
+    gui->oponent = oponent;
+
+    return gui;
+}
+
+void destroy_gui_context(GuiContext *gui) {
+    free(gui);
+}
 
 void strela(GtkWidget *widget, gpointer data) {
     // Získanie ukazovateľa na konkrétne políčko
-    Gui_Click_Data *click_data = (Gui_Click_Data *)data;
+    Gui_Click_data *click_data = (Gui_Click_data*)data;
     Hrac *hrac = click_data->hrac;
-    Policko *policko = &hrac->plocha->hraciaPlocha[click_data->x][click_data->y];
+    int x = click_data->x;
+    int y = click_data->y;
+     Policko *policko = getPolicko(x,y, getHraciaPlocha(hrac));
 
-    g_print("Kliknuté na políčko: (%d, %d)\n", policko->x, policko->y);
+    g_print("Kliknuté na políčko: (%d, %d)\n", x, y);
 
     // Kontrola, či už bolo na políčko vystrelené
-    if (policko->strela) {
+    if (getStrela(policko)) {
         g_print("Na toto políčko už bolo vystrelené.\n");
         return;
     }
@@ -36,9 +51,16 @@ void strela(GtkWidget *widget, gpointer data) {
         g_print("Chyba: Nepodarilo sa načítať pôvodný obrázok tlačidla.\n");
         return;
     }
-
+    const char *image_path = "";
     // Načítanie obrázka strely
-    const char *image_path = "../Grafika/Trefa.png";
+    if (getTyp(policko) == lodicka) {
+        g_print("Trafená loď!\n");
+        image_path = "../Grafika/Trefa.png";
+    } else {
+        g_print("Voda!\n");
+        image_path = "../Grafika/clup.png";
+    }
+
     GdkPixbuf *shot_pixbuf = gdk_pixbuf_new_from_file(image_path, NULL);
     if (!shot_pixbuf) {
         g_print("Chyba: Nepodarilo sa načítať obrázok strely.\n");
@@ -68,12 +90,18 @@ void strela(GtkWidget *widget, gpointer data) {
 
     // Nastavenie stavu políčka, ako zasiahnutého
     setStrela(policko);
-    free(click_data);
 }
 
 
-
-void create_grid(GtkWidget *grid, Hrac* hrac, bool is_interactive, GCallback callback) {
+void create_grid(GuiContext* gui, bool is_interactive, GCallback callback, bool is_oponent) {
+    GtkWidget *grid;
+    if (is_oponent) {
+        gui->oponentovaPlochaGrid = gtk_grid_new();
+        grid = gui->oponentovaPlochaGrid;
+    } else {
+        gui->hracovaPlochaGrid = gtk_grid_new();
+        grid = gui->hracovaPlochaGrid;
+    }
 
     // Pridanie súradníc, ako hlavičky
     for (int i = 0; i <= 10; i++) {
@@ -116,13 +144,23 @@ void create_grid(GtkWidget *grid, Hrac* hrac, bool is_interactive, GCallback cal
 
                 if (is_interactive && callback != NULL) {
                     // Dynamicky alokujeme štruktúru `Gui_Click_Data` pre tlačidlo
-                    Gui_Click_Data *click_data = malloc(sizeof(Gui_Click_Data));
-                    click_data->hrac = hrac;
-                    click_data->x = i - 1; // Súradnice na mriežke
-                    click_data->y = j - 1;
-
+                    Gui_Click_data *data = malloc(sizeof(Gui_Click_data));
+                    if (!data) {
+                        g_print("Chyba: Nepodarilo sa alokovať pamäť pre `Gui_Click_Data`.\n");
+                        return;
+                    }
+                    if (is_oponent) {
+                        data->hrac = gui->oponent;
+                        data->grid = gui->oponentovaPlochaGrid;
+                    } else
+                    {
+                        data->hrac = gui->hrac;
+                        data->grid = gui->hracovaPlochaGrid;
+                    }
+                    data->x = i - 1;
+                    data->y = j - 1;
                     // Prihlásenie signálu a pridanie dát
-                    g_signal_connect_data(button, "clicked", callback, click_data, (GClosureNotify)free, 0);
+                    g_signal_connect_data(button, "clicked", callback, data, (GClosureNotify)free, 0);
                 }
 
                 gtk_grid_attach(GTK_GRID(grid), button, j, i, 1, 1);
@@ -135,18 +173,16 @@ void create_grid(GtkWidget *grid, Hrac* hrac, bool is_interactive, GCallback cal
     }
 }
 
-gboolean on_editor_window_close(GtkWidget *widget, GdkEvent *event, gpointer data) {
-    Hrac *hrac = (Hrac *)data;
-
-    if (!are_all_ships_done(hrac)) {
+void on_editor_window_close(GtkWidget *widget, GdkEvent *event, gpointer data) {
+    GuiContext *gui =(GuiContext*)data;
+    if (!are_all_ships_done(gui->hrac)) {
         GtkWidget *dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
                                                    "Nemôžete zatvoriť editor, kým nerozložíte všetky lodičky!");
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
-        return TRUE; // Zamedzí zatvoreniu okna
+    } else {
+        gtk_widget_destroy(widget);
     }
-
-    return FALSE; // Povolenie zatvorenia okna
 }
 
 void place_ship_on_grid(GtkWidget *grid, int start_x, int start_y, int end_x, int end_y) {
@@ -240,57 +276,52 @@ void place_ship_on_grid(GtkWidget *grid, int start_x, int start_y, int end_x, in
     g_object_unref(ship_pixbuf);
 }
 
-void create_main_layout(Hrac *hrac, Hrac *oponent) {
-    GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(window), "Battleships");
-    gtk_window_set_default_size(GTK_WINDOW(window), 1200, 600);
-    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+void create_main_layout(GuiContext* gui) {
+     gui->main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(gui->main_window), "Battleships");
+    gtk_window_set_default_size(GTK_WINDOW(gui->main_window), 1200, 600);
+    g_signal_connect(gui->main_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
     GtkWidget *mainGrid = gtk_grid_new();
-    gtk_container_add(GTK_CONTAINER(window), mainGrid);
+    gtk_container_add(GTK_CONTAINER(gui->main_window), mainGrid);
 
-    // Oponentova hracia plocha (vľavo)
-    oponentovaPlochaGrid = gtk_grid_new();
-    create_grid(oponentovaPlochaGrid, oponent, true, G_CALLBACK(strela));
-    gtk_grid_attach(GTK_GRID(mainGrid), oponentovaPlochaGrid, 0, 0, 1, 1);
+
+    create_grid(gui, true, G_CALLBACK(strela),true);
+    gtk_grid_attach(GTK_GRID(mainGrid), gui->oponentovaPlochaGrid, 0, 0, 1, 1);
 
     // Stredný panel (info o skóre, správy, stav hry)
-    infoBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+    gui->infoBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     GtkWidget *label = gtk_label_new("Zobrazovanie skóre a stavu hry");
-    gtk_box_pack_start(GTK_BOX(infoBox), label, FALSE, FALSE, 0);
-    gtk_grid_attach(GTK_GRID(mainGrid), infoBox, 1, 0, 1, 1);
+    gtk_box_pack_start(GTK_BOX(gui->infoBox), label, FALSE, FALSE, 0);
+    gtk_grid_attach(GTK_GRID(mainGrid), gui->infoBox, 1, 0, 1, 1);
 
-    // Hracova hracia plocha (vpravo)
-    hracovaPlochaGrid = gtk_grid_new();
-    create_grid(hracovaPlochaGrid, hrac, false, NULL);
-    gtk_grid_attach(GTK_GRID(mainGrid), hracovaPlochaGrid, 2, 0, 1, 1);
+    create_grid(gui, false, NULL,false);
+    gtk_grid_attach(GTK_GRID(mainGrid), gui->hracovaPlochaGrid, 2, 0, 1, 1);
 
     // Prechádzame cez hraciu plochu hráča
     int start_x = -1;
     int start_y = -1;
     int end_x = -1;
     int end_y = -1;
-    // Prechádzame cez hraciu plochu hráča
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < i+1; j++) {
-            start_x = hrac->lode[i][j].start_x;
-            start_y = hrac->lode[i][j].start_y;
-            end_x = hrac->lode[i][j].end_x;
-            end_y = hrac->lode[i][j].end_y;
-            place_ship_on_grid(hracovaPlochaGrid, start_x, start_y, end_x, end_y);
+            start_x = gui->hrac->lode[i][j].start_x;
+            start_y = gui->hrac->lode[i][j].start_y;
+            end_x = gui->hrac->lode[i][j].end_x;
+            end_y = gui->hrac->lode[i][j].end_y;
+            place_ship_on_grid(gui->hracovaPlochaGrid, start_x, start_y, end_x, end_y);
         }
     }
 
-
-    gtk_widget_show_all(window);
+    gtk_widget_show_all(gui->main_window);
 }
 
 
 void on_confirm_clicked(GtkWidget *widget, gpointer data) {
-    Hrac *hrac = (Hrac *)data;
+    GuiContext *gui = (GuiContext *)data;
 
     // Kontrola, či hráč rozložil všetky lodičky
-    if (!are_all_ships_done(hrac)) {
+    if (!are_all_ships_done(gui->hrac)) {
         GtkWidget *dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
                                                    "Nemôžete potvrdiť, kým nerozložíte všetky lodičky!");
         gtk_dialog_run(GTK_DIALOG(dialog));
@@ -303,6 +334,7 @@ void on_confirm_clicked(GtkWidget *widget, gpointer data) {
     gtk_widget_destroy(editor_window); // Zničí okno editoru
 
     g_print("Lodičky hráča boli potvrdené a editor zatvorený.\n");
+    create_main_layout(gui);
 }
 
 // Globálne premenné na uloženie kliknutých súradníc
@@ -311,17 +343,17 @@ static int first_click_y = -1;
 
 // Funkcia na spracovanie kliknutí pri nastavovaní lodičky
 void handle_ship_placement(GtkWidget *widget, gpointer data) {
-    Gui_Click_Data *gui_click_data = (Gui_Click_Data *)data;
+    Gui_Click_data *dataGui = (Gui_Click_data*)data;
 
     if (first_click_x == -1 && first_click_y == -1) {
         // Prvé kliknutie
-        first_click_x = gui_click_data->x;
-        first_click_y = gui_click_data->y;
+        first_click_x = dataGui->x;
+        first_click_y = dataGui->y;
         g_print("Prvé kliknutie: (%d, %d)\n", first_click_x, first_click_y);
     } else {
         // Druhé kliknutie
-        int second_click_x = gui_click_data->x;
-        int second_click_y = gui_click_data->y;
+        int second_click_x = dataGui->x;
+        int second_click_y = dataGui->y;
         g_print("Druhé kliknutie: (%d, %d)\n", second_click_x, second_click_y);
 
         // Kontrola, či sú na rovnakom riadku alebo stĺpci
@@ -346,7 +378,7 @@ void handle_ship_placement(GtkWidget *widget, gpointer data) {
 
         // Overenie, či je počet lodí daného typu k dispozícii
         enum LodickaEnum typLodicky = length;
-        Hrac *hrac = gui_click_data->hrac;           // Získanie aktuálneho hráča (implementácia závisí od logiky hry)
+        Hrac *hrac = dataGui->hrac;           // Získanie aktuálneho hráča (implementácia závisí od logiky hry)
 
         if (hrac->lode[typLodicky - 2] == 0) {
             g_print("Nie je dostupná loď tejto veľkosti (%d)!\n", length);
@@ -364,7 +396,7 @@ void handle_ship_placement(GtkWidget *widget, gpointer data) {
             g_print("Lodička úspešne umiestnená!\n");
 
             // Aktualizácia GUI
-            place_ship_on_grid(editor_grid, begin_x, begin_y, end_x, end_y);
+            place_ship_on_grid(dataGui->grid, begin_x, begin_y, end_x, end_y);
         } else {
             g_print("Chyba pri nastavovaní lodičky!\n");
         }
@@ -376,23 +408,22 @@ void handle_ship_placement(GtkWidget *widget, gpointer data) {
 }
 
 
-void open_ship_editor(Hrac *hrac) {
+void open_ship_editor(GuiContext *gui) {
     GtkWidget *editor_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(editor_window), "Editor lodičiek");
     gtk_window_set_default_size(GTK_WINDOW(editor_window), 800, 800);
 
     g_signal_connect(editor_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
-    g_signal_connect(editor_window, "delete-event", G_CALLBACK(on_editor_window_close), hrac);
+    g_signal_connect(editor_window, "delete-event", G_CALLBACK(on_editor_window_close), gui);
 
     // Hlavný grid
     GtkWidget *main_grid = gtk_grid_new();
     gtk_container_add(GTK_CONTAINER(editor_window), main_grid);
 
     // Editor hracej plochy naľavo
-    editor_grid = gtk_grid_new();
-    gtk_grid_attach(GTK_GRID(main_grid), editor_grid, 0, 0, 1, 1);
 
-    create_grid(editor_grid, hrac, true, G_CALLBACK(handle_ship_placement));
+    create_grid(gui, true, G_CALLBACK(handle_ship_placement),false);
+    gtk_grid_attach(GTK_GRID(main_grid), gui->hracovaPlochaGrid, 0, 0, 1, 1);
 
     // Panel s lodičkami napravo
     GtkWidget *ships_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
@@ -432,10 +463,10 @@ void open_ship_editor(Hrac *hrac) {
     gtk_box_set_homogeneous(GTK_BOX(button_box), TRUE);
     gtk_grid_attach(GTK_GRID(main_grid), button_box, 0, 1, 2, 1);
 
-    confirm_button = gtk_button_new_with_label("Confirm");
-    gtk_box_pack_start(GTK_BOX(button_box), confirm_button, FALSE, FALSE, 0);
+    gui->confirm_button = gtk_button_new_with_label("Confirm");
+    gtk_box_pack_start(GTK_BOX(button_box), gui->confirm_button, FALSE, FALSE, 0);
 
-    g_signal_connect(confirm_button, "clicked", G_CALLBACK(on_confirm_clicked), hrac);
+    g_signal_connect(gui->confirm_button, "clicked", G_CALLBACK(on_confirm_clicked), gui);
 
     gtk_widget_show_all(editor_window);
 
@@ -446,7 +477,7 @@ void open_ship_editor(Hrac *hrac) {
 void on_start_game_clicked(GtkWidget *widget, gpointer data) {
     // Simulácia úspešného pripojenia na server
     int result = 1; // 1 = úspech, 0 = druhý hráč nie je pripojený, -1 = chyba
-    Hrac *hrac = (Hrac *)data;
+    GuiContext *gui = (GuiContext*)data;
 
     if (result == 1) {
         g_print("Druhý hráč je pripojený. Spúšťame hru...\n");
@@ -458,7 +489,7 @@ void on_start_game_clicked(GtkWidget *widget, gpointer data) {
         }
 
         // Otvorenie editoru lodí
-        open_ship_editor(hrac);
+        open_ship_editor(gui);
     } else if (result == 0) {
         GtkWidget *dialog = gtk_message_dialog_new(
             NULL,
@@ -483,7 +514,7 @@ void on_start_game_clicked(GtkWidget *widget, gpointer data) {
 }
 
 
-void create_main_window(Hrac* hrac) {
+void create_main_window(GuiContext* gui) {
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), "Battleships - Úvodné okno");
     gtk_window_set_default_size(GTK_WINDOW(window), 400, 300);
@@ -502,7 +533,7 @@ void create_main_window(Hrac* hrac) {
     gtk_box_pack_start(GTK_BOX(box), start_button, TRUE, TRUE, 0);
 
     // Callback funkcia pre tlačidlo
-    g_signal_connect(start_button, "clicked", G_CALLBACK(on_start_game_clicked), hrac);
+    g_signal_connect(start_button, "clicked", G_CALLBACK(on_start_game_clicked), gui);
 
     gtk_widget_show_all(window);
     // Spustenie blokujúcej slučky pre editor

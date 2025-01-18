@@ -177,6 +177,30 @@ Game_Logic.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/LodickyUdSP.dir/build.make CMakeFiles/LodickyUdSP.dir/Game_Logic.c.s
 .PHONY : Game_Logic.c.s
 
+GenericMatrix.o: GenericMatrix.c.o
+.PHONY : GenericMatrix.o
+
+# target to build an object file
+GenericMatrix.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LodickyUdSP.dir/build.make CMakeFiles/LodickyUdSP.dir/GenericMatrix.c.o
+.PHONY : GenericMatrix.c.o
+
+GenericMatrix.i: GenericMatrix.c.i
+.PHONY : GenericMatrix.i
+
+# target to preprocess a source file
+GenericMatrix.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LodickyUdSP.dir/build.make CMakeFiles/LodickyUdSP.dir/GenericMatrix.c.i
+.PHONY : GenericMatrix.c.i
+
+GenericMatrix.s: GenericMatrix.c.s
+.PHONY : GenericMatrix.s
+
+# target to generate assembly for a file
+GenericMatrix.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/LodickyUdSP.dir/build.make CMakeFiles/LodickyUdSP.dir/GenericMatrix.c.s
+.PHONY : GenericMatrix.c.s
+
 Hrac.o: Hrac.c.o
 .PHONY : Hrac.o
 
@@ -288,6 +312,9 @@ help:
 	@echo "... Game_Logic.o"
 	@echo "... Game_Logic.i"
 	@echo "... Game_Logic.s"
+	@echo "... GenericMatrix.o"
+	@echo "... GenericMatrix.i"
+	@echo "... GenericMatrix.s"
 	@echo "... Hrac.o"
 	@echo "... Hrac.i"
 	@echo "... Hrac.s"
