@@ -15,7 +15,10 @@ GuiContext* create_gui_context(Hrac *hrac, Hrac *oponent) {
     gui->confirm_button = NULL;
     gui->hrac = hrac;
     gui->oponent = oponent;
-
+    gui->x = -1;
+    gui->y = -1;
+    gui->first_click_x = -1;
+    gui->first_click_y = -1;
     return gui;
 }
 
@@ -93,7 +96,7 @@ void strela(GtkWidget *widget, gpointer data) {
 }
 
 
-void create_grid(GuiContext* gui, bool is_interactive, GCallback callback, bool is_oponent) {
+void create_grid(GuiContext* gui, bool is_interactive, GCallback callback, bool is_oponent, bool is_editor) {
     GtkWidget *grid;
     if (is_oponent) {
         gui->oponentovaPlochaGrid = gtk_grid_new();
@@ -144,10 +147,10 @@ void create_grid(GuiContext* gui, bool is_interactive, GCallback callback, bool 
 
                 if (is_interactive && callback != NULL) {
                     // Dynamicky alokujeme štruktúru `Gui_Click_Data` pre tlačidlo
+
                     Gui_Click_data *data = malloc(sizeof(Gui_Click_data));
                     if (!data) {
-                        g_print("Chyba: Nepodarilo sa alokovať pamäť pre `Gui_Click_Data`.\n");
-                        return;
+                        g_print("Chyba: Nepodarilo sa alokovať pamäť pre `Gui_Click_Data`.\n");return;
                     }
                     if (is_oponent) {
                         data->hrac = gui->oponent;
@@ -159,7 +162,7 @@ void create_grid(GuiContext* gui, bool is_interactive, GCallback callback, bool 
                     }
                     data->x = i - 1;
                     data->y = j - 1;
-                    // Prihlásenie signálu a pridanie dát
+                    data->gui = gui;
                     g_signal_connect_data(button, "clicked", callback, data, (GClosureNotify)free, 0);
                 }
 
@@ -286,7 +289,7 @@ void create_main_layout(GuiContext* gui) {
     gtk_container_add(GTK_CONTAINER(gui->main_window), mainGrid);
 
 
-    create_grid(gui, true, G_CALLBACK(strela),true);
+    create_grid(gui, true, G_CALLBACK(strela),true,false);
     gtk_grid_attach(GTK_GRID(mainGrid), gui->oponentovaPlochaGrid, 0, 0, 1, 1);
 
     // Stredný panel (info o skóre, správy, stav hry)
@@ -295,7 +298,7 @@ void create_main_layout(GuiContext* gui) {
     gtk_box_pack_start(GTK_BOX(gui->infoBox), label, FALSE, FALSE, 0);
     gtk_grid_attach(GTK_GRID(mainGrid), gui->infoBox, 1, 0, 1, 1);
 
-    create_grid(gui, false, NULL,false);
+    create_grid(gui, false, NULL,false,false);
     gtk_grid_attach(GTK_GRID(mainGrid), gui->hracovaPlochaGrid, 2, 0, 1, 1);
 
     // Prechádzame cez hraciu plochu hráča
@@ -337,73 +340,68 @@ void on_confirm_clicked(GtkWidget *widget, gpointer data) {
     create_main_layout(gui);
 }
 
-// Globálne premenné na uloženie kliknutých súradníc
-static int first_click_x = -1;
-static int first_click_y = -1;
 
 // Funkcia na spracovanie kliknutí pri nastavovaní lodičky
 void handle_ship_placement(GtkWidget *widget, gpointer data) {
-    Gui_Click_data *dataGui = (Gui_Click_data*)data;
-
-    if (first_click_x == -1 && first_click_y == -1) {
-        // Prvé kliknutie
-        first_click_x = dataGui->x;
-        first_click_y = dataGui->y;
-        g_print("Prvé kliknutie: (%d, %d)\n", first_click_x, first_click_y);
+    Gui_Click_data *click_data = (Gui_Click_data*)data;
+    GuiContext *gui = click_data->gui;
+    if (gui->first_click_x == -1 && gui->first_click_y == -1) {
+        gui->first_click_x = click_data->x;
+        gui->first_click_y = click_data->y;
+        g_print("Prvé kliknutie: (%d, %d)\n", gui->first_click_x, gui->first_click_y);
     } else {
         // Druhé kliknutie
-        int second_click_x = dataGui->x;
-        int second_click_y = dataGui->y;
+        int second_click_x = click_data->x;
+        int second_click_y = click_data->y;
         g_print("Druhé kliknutie: (%d, %d)\n", second_click_x, second_click_y);
 
         // Kontrola, či sú na rovnakom riadku alebo stĺpci
-        if (first_click_x != second_click_x && first_click_y != second_click_y) {
+        if (gui->first_click_x != second_click_x && gui->first_click_y != second_click_y) {
             g_print("Lodička musí byť umiestnená horizontálne alebo vertikálne!\n");
-            first_click_x = -1;
-            first_click_y = -1;
+            gui->first_click_x = -1;
+            gui->first_click_y = -1;
             return;
         }
 
-        if (first_click_x == second_click_x && first_click_y == second_click_y) {
+        if (gui->first_click_x == second_click_x && gui->first_click_y == second_click_y) {
             g_print("Lodička musí mať dĺžku aspoň 2 políčka!\n");
-            first_click_x = -1;
-            first_click_y = -1;
+            gui->first_click_x = -1;
+            gui->first_click_y = -1;
             return;
         }
 
         // Výpočet dĺžky lodičky
-        int length = (first_click_x == second_click_x)
-                         ? abs(second_click_y - first_click_y) + 1
-                         : abs(second_click_x - first_click_x) + 1;
+        int length = (gui->first_click_x == second_click_x)
+                         ? abs(second_click_y - gui->first_click_y) + 1
+                         : abs(second_click_x - gui->first_click_x) + 1;
 
         // Overenie, či je počet lodí daného typu k dispozícii
         enum LodickaEnum typLodicky = length;
-        Hrac *hrac = dataGui->hrac;           // Získanie aktuálneho hráča (implementácia závisí od logiky hry)
 
-        if (hrac->lode[typLodicky - 2] == 0) {
+        if (click_data->hrac->lode[typLodicky - 2] == 0) {
             g_print("Nie je dostupná loď tejto veľkosti (%d)!\n", length);
-            first_click_x = -1;
-            first_click_y = -1;
+            gui->first_click_x = -1;
+            gui->first_click_y = -1;
             return;
         }
 
-        int begin_x = MIN(first_click_x, second_click_x);
-        int begin_y = MIN(first_click_y, second_click_y);
-        int end_x = MAX(first_click_x, second_click_x);
-        int end_y = MAX(first_click_y, second_click_y);
+        int begin_x = MIN(gui->first_click_x, second_click_x);
+        int begin_y = MIN(gui->first_click_y, second_click_y);
+        int end_x = MAX(gui->first_click_x, second_click_x);
+        int end_y = MAX(gui->first_click_y, second_click_y);
         // Nastavenie lodičky na hracej ploche
-        if (nastavLodicku(typLodicky, begin_x, begin_y, end_x, end_y, hrac)) {
+        if (nastavLodicku(typLodicky, begin_x, begin_y, end_x, end_y, click_data->hrac)) {
             g_print("Lodička úspešne umiestnená!\n");
 
             // Aktualizácia GUI
-            place_ship_on_grid(dataGui->grid, begin_x, begin_y, end_x, end_y);
+            place_ship_on_grid(gui->hracovaPlochaGrid, begin_x, begin_y, end_x, end_y);
         } else {
             g_print("Chyba pri nastavovaní lodičky!\n");
         }
 
         // Reset kliknutí
-        first_click_x = -1;
-        first_click_y = -1;
+        gui->first_click_x = -1;
+        gui->first_click_y = -1;
     }
 }
 
@@ -422,7 +420,7 @@ void open_ship_editor(GuiContext *gui) {
 
     // Editor hracej plochy naľavo
 
-    create_grid(gui, true, G_CALLBACK(handle_ship_placement),false);
+    create_grid(gui, true, G_CALLBACK(handle_ship_placement),false,true);
     gtk_grid_attach(GTK_GRID(main_grid), gui->hracovaPlochaGrid, 0, 0, 1, 1);
 
     // Panel s lodičkami napravo

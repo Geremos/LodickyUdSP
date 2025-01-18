@@ -28,6 +28,7 @@ typedef struct  Gui_Click_data {
     int y;
     Hrac *hrac;
     GtkWidget* grid;
+    GuiContext* gui;
 } Gui_Click_data;
 
 // Vytvára hlavné rozloženie GUI
@@ -38,7 +39,7 @@ void destroy_gui_context(GuiContext *gui);
 void create_main_layout(GuiContext* gui);
 
 // Vytvorenie hracej plochy
-void create_grid(GuiContext* gui, bool is_interactive, GCallback callback, bool is_oponent);
+void create_grid(GuiContext* gui, bool is_interactive, GCallback callback, bool is_oponent,bool is_editor);
 
 void strela(GtkWidget *widget, gpointer data);
 void on_editor_window_close(GtkWidget *widget, GdkEvent *event, gpointer data);
