@@ -33,7 +33,6 @@ GenericMatrix* create_matrix(size_t rows, size_t cols, size_t elemSize) {
             return NULL;
         }
     }
-
     return matrix;
 }
 

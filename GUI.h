@@ -19,6 +19,7 @@ typedef struct GuiContext {
     Hrac *oponent;
     int first_click_x;
     int first_click_y;
+    
 } GuiContext;
 
 typedef struct  Gui_Click_data {
